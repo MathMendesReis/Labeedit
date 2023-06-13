@@ -11,4 +11,4 @@ const userController = new UserController(
   )
 );
 
-userRouter.get('/', userController.getAllUsers);
+userRouter.get('/', userController.login);

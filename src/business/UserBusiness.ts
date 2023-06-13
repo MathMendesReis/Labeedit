@@ -6,7 +6,7 @@ export class UserBusiness {
     private userBaseDataBase = new UserDataBase()
   ) {}
 
-  public getAllUsers =async () => {
-    return await this.userBaseDataBase.getAllUsers();
+  public login =async () => {
+    return await this.userBaseDataBase.getAllUsersByEmail();
   };
 }

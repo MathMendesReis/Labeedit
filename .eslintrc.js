@@ -21,5 +21,7 @@ module.exports = {
     'no-unused-vars': 'error',
     semi: ['error', 'always'],
     quotes: ['error', 'single'],
+    'consistent-return': 'error',
+    'require-await': 'error',
   },
 };
