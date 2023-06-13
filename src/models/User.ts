@@ -1,6 +1,8 @@
 export enum Role{
-  "ADMIN",
-  "USER"
+  // eslint-disable-next-line no-unused-vars
+  USER = 'user',
+  // eslint-disable-next-line no-unused-vars
+  ADMIN = 'admin',
 }
 
 export interface users{
@@ -12,12 +14,36 @@ export interface users{
 
 export class Users {
   constructor(
-    private id:string,
-    private name:string,
-    private email:string,
-    private role:Role,
-    private created_at:Date,
-  ) {
+  // eslint-disable-next-line no-unused-vars
+  private id:string,
+  // eslint-disable-next-line no-unused-vars
+  private name:string,
+  // eslint-disable-next-line no-unused-vars
+  private email:string,
+  // eslint-disable-next-line no-unused-vars
+  private role:Role,
+  // eslint-disable-next-line no-unused-vars
+  private password:string,
+  // eslint-disable-next-line no-unused-vars
+  private created_at:string,
+  ) {}
 
+  public getId():string{
+    return this.id;
+  }
+  public getName():string{
+    return this.name;
+  }
+  public getEmail():string{
+    return this.email;
+  }
+  public getRole():string{
+    return this.role;
+  }
+  public getPassword():string{
+    return this.password;
+  }
+  public getCreated_at():string{
+    return this.created_at;
   }
 }
