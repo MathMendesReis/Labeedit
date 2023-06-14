@@ -13,9 +13,11 @@ const userController = new UserController(
     new UserDataBase(),
     new IdGenerator(),
     new TokenManager(),
-    new HashManager()
+    new HashManager(),
   )
 );
 
 userRouter.get('/login', userController.login);
 userRouter.post('/signup', userController.singUp);
+userRouter.put('/update', userController.updateUser);
+userRouter.delete('/delete', userController.deleteUserById);

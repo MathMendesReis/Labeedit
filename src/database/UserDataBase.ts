@@ -1,17 +1,19 @@
-import { Users } from '../models/User';
+import { InputDelete } from '../DTOs/inputDelete.DTO';
+import { Users, users } from '../models/User';
 import { BaseDatabase } from './BaseDataBase';
 
 export class UserDataBase extends BaseDatabase {
 private static TABLE_ACCOUNTS = 'users';
 
-public getAllUsersByEmail =async (email:string):Promise<Users[]> => {
-  return await BaseDatabase.connection(UserDataBase.TABLE_ACCOUNTS)
-  .where({email});
+public findUsersByEmail =async (email:string):Promise<users> => {
+  return (await BaseDatabase.connection(UserDataBase.TABLE_ACCOUNTS)
+    .where({ email }))[0];
 };
-public getAllUsersByPassword =async (password:string):Promise<Users[]> => {
-  return await BaseDatabase.connection(UserDataBase.TABLE_ACCOUNTS)
-  .where({password});
+public findUserById = async (id: string | InputDelete): Promise<users> => {
+  return (await BaseDatabase.connection(UserDataBase.TABLE_ACCOUNTS)
+    .where({ id }))[0];
 };
+
 
 public insertUserInDB =async (user:Users):Promise<void> => {
 
@@ -23,5 +25,21 @@ public insertUserInDB =async (user:Users):Promise<void> => {
     password:user.getPassword(),
     created_at:user.getCreated_at()
   });
+};
+
+public updateUser =async (user:Users):Promise<void> => {
+   await BaseDatabase.connection(UserDataBase.TABLE_ACCOUNTS)
+   .where({id:user.getId()})
+   .update({
+    name:user.getName(),
+    email:user.getEmail(),
+   });
+   return;
+};
+
+public deleteUserById =async (id:string):Promise<void> => {
+  return await BaseDatabase.connection(UserDataBase.TABLE_ACCOUNTS)
+  .where({id})
+  .del();
 };
 }

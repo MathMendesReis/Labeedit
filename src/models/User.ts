@@ -6,10 +6,12 @@ export enum Role{
 }
 
 export interface users{
+   id:string,
    name:string,
    email:string,
    role:Role,
-   created_at:Date,
+   password:string,
+   created_at:string,
 }
 
 export class Users {
@@ -34,10 +36,10 @@ export class Users {
   public getName():string{
     return this.name;
   }
-  public getEmail():string{
+  public getEmail(): string {
     return this.email;
   }
-  public getRole():string{
+  public getRole():Role{
     return this.role;
   }
   public getPassword():string{
@@ -45,5 +47,9 @@ export class Users {
   }
   public getCreated_at():string{
     return this.created_at;
+  }
+
+  public setName(name:string){
+    this.name = name;
   }
 }
