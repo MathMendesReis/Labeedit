@@ -1,5 +1,5 @@
 import { UserDataBase } from '../database/UserDataBase';
-import { Input } from '../inteface/InputLogin';
+import { Input } from '../DTOs/InputLogin';
 import { OutputGetUser } from '../inteface/outputGetUse';
 import { IdGenerator } from '../services/IdGenerator';
     // eslint-disable-next-line no-unused-vars
@@ -64,7 +64,7 @@ export class UserBusiness {
       const token = this.tokenManager.createToken(tokenPayload);
       return {
         message:'Usúario cadastrado com sucesso.',
-        token
+        token:token
       };
     };
 

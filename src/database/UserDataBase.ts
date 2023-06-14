@@ -42,4 +42,10 @@ public deleteUserById =async (id:string):Promise<void> => {
   .where({id})
   .del();
 };
+
+public deleteUserByUserId =async (user_id:string):Promise<void> => {
+  return await BaseDatabase.connection(UserDataBase.TABLE_ACCOUNTS)
+  .where({user_id})
+  .del();
+};
 }

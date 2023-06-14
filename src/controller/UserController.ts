@@ -1,10 +1,11 @@
 import { Request, Response } from 'express';
 import { UserBusiness } from '../business/UserBusiness';
-import { InputSchema } from '../inteface/InputLogin';
+import { InputSchema } from '../DTOs/InputLogin';
 import { ZodError } from 'zod';
 import { BaseError } from '../error/BaseError';
 import { InputSingUpSchema } from '../DTOs/InputSingUp.DTO';
 import { InputUpdateSchema } from '../DTOs/inputUpdate.DTO';
+import { InputDeleteByIdSchema } from '../DTOs/inputDelete.DTO';
 
 export class UserController {
   constructor(
@@ -63,7 +64,7 @@ export class UserController {
   };
   public deleteUserById =async (req:Request, res:Response):Promise<void> => {
     try {
-      const inputData = InputUpdateSchema.parse(req.body);
+      const inputData = InputDeleteByIdSchema.parse(req.body);
       const result = await this.userBusiness.deleteUserById(inputData);
       res.status(200).send(result);
     } catch (error) {

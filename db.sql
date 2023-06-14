@@ -15,6 +15,6 @@ VALUES(
   '1686603411172','fulano','fulano@example.com','12345678','user'
 );
 
-SELECT * from users;
+SELECT * from post;
 
-DROP table users;
+DROP table sqlite_sequence;

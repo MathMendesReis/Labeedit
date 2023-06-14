@@ -5,6 +5,8 @@ export class Posts {
   // eslint-disable-next-line no-unused-vars
     private content:string,
   // eslint-disable-next-line no-unused-vars
+    private update_at:string,
+  // eslint-disable-next-line no-unused-vars
     private user_id:string,
 
   ){}
@@ -15,8 +17,12 @@ export class Posts {
   public getContent():string{
     return this.content;
   }
+
   public getUserId():string{
     return this.user_id;
+  }
+  public getUpdatAt():string{
+    return this.update_at;
   }
 }
 
