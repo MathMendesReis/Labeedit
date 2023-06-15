@@ -15,6 +15,36 @@ VALUES(
   '1686603411172','fulano','fulano@example.com','12345678','user'
 );
 
-SELECT * from post;
+SELECT * from "likesDislike";
 
-DROP table sqlite_sequence;
+
+
+CREATE TABLE likesDislikes(
+  id TEXT NOT NULL PRIMARY KEY UNIQUE,
+  user_id TEXT ,
+  post_id TEXT,
+  type INT NOT NULL, -- 1 = like |-0 dislike
+  created_at DATETIME DEFAULT (DATETIME('now', 'localtime')) NOT NULL,
+  FOREIGN KEY (user_id) REFERENCES users(id),
+  FOREIGN KEY (post_id) REFERENCES posts(id)
+);
+
+insert into "likesDislikes"(id,user_id,post_id,type)
+VALUES(
+  'id','id_user','id_post',0
+);
+
+SELECT *
+FROM likesDislikes
+INNER JOIN users ON likesDislikes.user_id = users.id;
+
+
+
+
+ALTER TABLE post RENAME TO posts;
+
+SELECT * from users;
+SELECT * from posts;
+SELECT * from "likesDislikes";
+
+DROP Table "likesDislikes";
