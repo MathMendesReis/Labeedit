@@ -33,8 +33,7 @@ class UserBusiness {
             };
             const token = this.tokenManager.createToken(tokenPayload);
             return {
-                message: 'Login realizado com sucesso',
-                token,
+                token
             };
         });
         this.singUp = ({ apelido, checkbox, email, password, }) => __awaiter(this, void 0, void 0, function* () {
