@@ -1,4 +1,4 @@
-export interface TokenUser{
-  message:string,
-  token:string
+export interface TokenUser {
+  message: string;
+  token: string;
 }

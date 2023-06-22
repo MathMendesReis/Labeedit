@@ -5,6 +5,7 @@ import { PostBusiness } from '../business/PostBusiness';
 import { PostDataBase } from '../database/PostDataBase';
 import { TokenManager } from '../services/TokenManager';
 import { UserDataBase } from '../database/UserDataBase';
+import { LikesDislikesDataBase } from '../database/LikeDislikeDataBase';
 
 export const postRouter = Router();
 
@@ -13,12 +14,13 @@ const postController = new PostController(
     new PostDataBase(),
     new IdGenerator(),
     new TokenManager(),
-    new UserDataBase()
+    new UserDataBase(),
+    new LikesDislikesDataBase()
   )
 );
 
-postRouter.get('/',postController.getAllpost);
-postRouter.get('/:id',postController.findPostByUserId);
-postRouter.post('/',postController.createPost);
-postRouter.put('/',postController.updatePost );
-postRouter.delete('/',postController.deletePost);
+postRouter.get('/', postController.getAllpost);
+postRouter.get('/:id', postController.findPostByUserId);
+postRouter.post('/', postController.createPost);
+postRouter.put('/', postController.updatePost);
+postRouter.delete('/', postController.deletePost);

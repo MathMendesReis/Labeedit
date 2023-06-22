@@ -10,7 +10,7 @@ import { InputDeleteByIdSchema } from '../DTOs/inputDelete.DTO';
 export class UserController {
   constructor(
     // eslint-disable-next-line no-unused-vars
-    private userBusiness : UserBusiness
+    private userBusiness: UserBusiness
   ) {}
 
   public login = async (req: Request, res: Response): Promise<void> => {
@@ -20,7 +20,9 @@ export class UserController {
       res.status(200).send(result);
     } catch (error) {
       if (error instanceof ZodError) {
-        res.status(400).json({ error: 'Erro de validação', issues: error.issues });
+        res
+          .status(400)
+          .json({ error: 'Erro de validação', issues: error.issues });
       } else if (error instanceof BaseError) {
         res.status(error.statusCode).json({ error: error.message });
       } else {
@@ -29,7 +31,7 @@ export class UserController {
     }
   };
 
-  public singUp =async (req:Request, res:Response):Promise<void> => {
+  public singUp = async (req: Request, res: Response): Promise<void> => {
     try {
       const inputData = InputSingUpSchema.parse(req.body);
       const result = await this.userBusiness.singUp(inputData);
@@ -37,16 +39,15 @@ export class UserController {
     } catch (error) {
       if (error instanceof ZodError) {
         res.status(400).send(error.issues);
-     } else if (error instanceof BaseError) {
+      } else if (error instanceof BaseError) {
         res.status(error.statusCode).send(error.message);
-     } else {
-        res.status(500).send('Erro inesperado'+' '+ error);
-     }
+      } else {
+        res.status(500).send('Erro inesperado' + ' ' + error);
+      }
     }
   };
 
-
-  public updateUser =async (req:Request, res:Response):Promise<void> => {
+  public updateUser = async (req: Request, res: Response): Promise<void> => {
     try {
       const inputData = InputUpdateSchema.parse(req.body);
 
@@ -55,14 +56,17 @@ export class UserController {
     } catch (error) {
       if (error instanceof ZodError) {
         res.status(400).send(error.issues);
-     } else if (error instanceof BaseError) {
+      } else if (error instanceof BaseError) {
         res.status(error.statusCode).send(error.message);
-     } else {
-        res.status(500).send('Erro inesperado'+' '+ error);
-     }
+      } else {
+        res.status(500).send('Erro inesperado' + ' ' + error);
+      }
     }
   };
-  public deleteUserById =async (req:Request, res:Response):Promise<void> => {
+  public deleteUserById = async (
+    req: Request,
+    res: Response
+  ): Promise<void> => {
     try {
       const inputData = InputDeleteByIdSchema.parse(req.body);
       const result = await this.userBusiness.deleteUserById(inputData);
@@ -70,11 +74,11 @@ export class UserController {
     } catch (error) {
       if (error instanceof ZodError) {
         res.status(400).send(error.issues);
-     } else if (error instanceof BaseError) {
+      } else if (error instanceof BaseError) {
         res.status(error.statusCode).send(error.message);
-     } else {
-        res.status(500).send('Erro inesperado'+' '+ error);
-     }
+      } else {
+        res.status(500).send('Erro inesperado' + ' ' + error);
+      }
     }
   };
 }

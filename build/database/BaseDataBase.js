@@ -11,7 +11,7 @@ class BaseDatabase {
 }
 exports.BaseDatabase = BaseDatabase;
 BaseDatabase.connection = (0, knex_1.knex)({
-    client: "sqlite3",
+    client: 'sqlite3',
     connection: {
         filename: process.env.DB_FILE_PATH,
     },
@@ -20,8 +20,8 @@ BaseDatabase.connection = (0, knex_1.knex)({
         min: 0,
         max: 1,
         afterCreate: (conn, cb) => {
-            conn.run("PRAGMA foreign_keys = ON", cb);
-        }
-    }
+            conn.run('PRAGMA foreign_keys = ON', cb);
+        },
+    },
 });
 //# sourceMappingURL=BaseDataBase.js.map

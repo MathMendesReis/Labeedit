@@ -1,4 +1,7 @@
-export interface OutputGetUser{
-  message:string,
-  token:string
+export interface OutputGetUserWithToken {
+  message: string;
+  token: string;
+}
+export interface OutputGetUser {
+  message: string;
 }
