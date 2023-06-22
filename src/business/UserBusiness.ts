@@ -47,8 +47,7 @@ export class UserBusiness {
     };
     const token = this.tokenManager.createToken(tokenPayload);
     return {
-      message: 'Login realizado com sucesso',
-      token,
+      token
     };
   };
 
