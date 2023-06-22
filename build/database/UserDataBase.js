@@ -14,8 +14,43 @@ const BaseDataBase_1 = require("./BaseDataBase");
 class UserDataBase extends BaseDataBase_1.BaseDatabase {
     constructor() {
         super(...arguments);
-        this.getAllUsers = () => __awaiter(this, void 0, void 0, function* () {
-            return `Olá mundo`;
+        this.findUsersByEmail = (email) => __awaiter(this, void 0, void 0, function* () {
+            return (yield BaseDataBase_1.BaseDatabase.connection(UserDataBase.TABLE_ACCOUNTS).where({
+                email,
+            }))[0];
+        });
+        this.findUserById = (id) => __awaiter(this, void 0, void 0, function* () {
+            return (yield BaseDataBase_1.BaseDatabase.connection(UserDataBase.TABLE_ACCOUNTS).where({ id }))[0];
+        });
+        this.insertUserInDB = (user) => __awaiter(this, void 0, void 0, function* () {
+            yield BaseDataBase_1.BaseDatabase.connection(UserDataBase.TABLE_ACCOUNTS).insert({
+                id: user.getId(),
+                apelido: user.getApelido(),
+                email: user.getEmail(),
+                role: user.getRole(),
+                password: user.getPassword(),
+                checkbox: user.getCheckbox(),
+                created_at: user.getCreated_at(),
+            });
+        });
+        this.updateUser = (user) => __awaiter(this, void 0, void 0, function* () {
+            yield BaseDataBase_1.BaseDatabase.connection(UserDataBase.TABLE_ACCOUNTS)
+                .where({ id: user.getId() })
+                .update({
+                apelido: user.getApelido(),
+                email: user.getEmail(),
+            });
+            return;
+        });
+        this.deleteUserById = (id) => __awaiter(this, void 0, void 0, function* () {
+            return yield BaseDataBase_1.BaseDatabase.connection(UserDataBase.TABLE_ACCOUNTS)
+                .where({ id })
+                .del();
+        });
+        this.deleteUserByUserId = (user_id) => __awaiter(this, void 0, void 0, function* () {
+            return yield BaseDataBase_1.BaseDatabase.connection(UserDataBase.TABLE_ACCOUNTS)
+                .where({ user_id })
+                .del();
         });
     }
 }

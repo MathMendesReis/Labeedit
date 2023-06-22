@@ -6,7 +6,10 @@
   "scripts": {
     "test": "jest",
     "start": "tsc && node build/index.js",
-    "dev": "ts-node-dev src/index.ts"
+    "dev": "ts-node-dev src/index.ts",
+    "lint": "eslint .",
+    "format": "prettier --write .",
+    "build":"tsc"
   },
   "repository": {
     "type": "git"

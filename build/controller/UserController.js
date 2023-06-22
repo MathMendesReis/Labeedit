@@ -10,17 +10,87 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.UserController = void 0;
-const UserBusiness_1 = require("../business/UserBusiness");
+const InputLogin_1 = require("../DTOs/InputLogin");
+const zod_1 = require("zod");
+const BaseError_1 = require("../error/BaseError");
+const InputSingUp_DTO_1 = require("../DTOs/InputSingUp.DTO");
+const inputUpdate_DTO_1 = require("../DTOs/inputUpdate.DTO");
+const inputDelete_DTO_1 = require("../DTOs/inputDelete.DTO");
 class UserController {
-    constructor(userBaseDataBase = new UserBusiness_1.UserBusiness()) {
-        this.userBaseDataBase = userBaseDataBase;
-        this.getAllUsers = (req, res) => __awaiter(this, void 0, void 0, function* () {
+    constructor(userBusiness) {
+        this.userBusiness = userBusiness;
+        this.login = (req, res) => __awaiter(this, void 0, void 0, function* () {
             try {
-                const users = yield this.userBaseDataBase.getAllUsers();
-                res.status(200).send(users);
+                const inputData = InputLogin_1.InputSchema.parse(req.body);
+                const result = yield this.userBusiness.login(inputData);
+                res.status(200).send(result);
             }
             catch (error) {
-                res.status(500).send(error);
+                if (error instanceof zod_1.ZodError) {
+                    res
+                        .status(400)
+                        .json({ error: 'Erro de validação', issues: error.issues });
+                }
+                else if (error instanceof BaseError_1.BaseError) {
+                    res.status(error.statusCode).json({ error: error.message });
+                }
+                else {
+                    res.status(500).json({ error: 'Erro inesperado', message: error });
+                }
+            }
+        });
+        this.singUp = (req, res) => __awaiter(this, void 0, void 0, function* () {
+            try {
+                const inputData = InputSingUp_DTO_1.InputSingUpSchema.parse(req.body);
+                const result = yield this.userBusiness.singUp(inputData);
+                res.status(200).send(result);
+            }
+            catch (error) {
+                if (error instanceof zod_1.ZodError) {
+                    res.status(400).send(error.issues);
+                }
+                else if (error instanceof BaseError_1.BaseError) {
+                    res.status(error.statusCode).send(error.message);
+                }
+                else {
+                    res.status(500).send('Erro inesperado' + ' ' + error);
+                }
+            }
+        });
+        this.updateUser = (req, res) => __awaiter(this, void 0, void 0, function* () {
+            try {
+                const inputData = inputUpdate_DTO_1.InputUpdateSchema.parse(req.body);
+                const result = yield this.userBusiness.updateUser(inputData);
+                res.status(200).send(result);
+            }
+            catch (error) {
+                if (error instanceof zod_1.ZodError) {
+                    res.status(400).send(error.issues);
+                }
+                else if (error instanceof BaseError_1.BaseError) {
+                    res.status(error.statusCode).send(error.message);
+                }
+                else {
+                    res.status(500).send('Erro inesperado' + ' ' + error);
+                }
+            }
+        });
+        this.deleteUserById = (req, res) => __awaiter(this, void 0, void 0, function* () {
+            try {
+                const inputData = inputDelete_DTO_1.InputDeleteByIdSchema.parse(req.body);
+                const result = yield this.userBusiness.deleteUserById(inputData);
+                res.status(200).send(result);
+            }
+            catch (error) {
+                if (error instanceof zod_1.ZodError) {
+                    res.status(400).send(error.issues);
+                }
+                else if (error instanceof BaseError_1.BaseError) {
+                    res.status(error.statusCode).send(error.message);
+                }
+                else {
+                    res.status(500).send('Erro inesperado' + ' ' + error);
+                }
             }
         });
     }

@@ -1,9 +1,7 @@
 import * as nodemailer from 'nodemailer';
 import dotenv from 'dotenv';
 
-
 dotenv.config();
-
 
 export class EmailService {
   private transporter: nodemailer.Transporter;
@@ -12,18 +10,21 @@ export class EmailService {
     this.transporter = nodemailer.createTransport({
       host: 'smtp.gmail.com',
       port: 587,
-      secure:false,
+      secure: false,
       auth: {
         user: 'matheusmendesreis@gmail.com',
-        pass: 'Mr310519'
+        pass: 'Mr310519',
         // user: process.env.OUTLOOK_USER,
         // pass: process.env.OUTLOOK_PASSWORD,
       },
     });
   }
 
-
-  public async sendEmail(to: string, subject: string, text: string): Promise<string> {
+  public async sendEmail(
+    to: string,
+    subject: string,
+    text: string
+  ): Promise<string> {
     try {
       const mailOptions = {
         from: 'matheusmendesreis@gmail.com',
