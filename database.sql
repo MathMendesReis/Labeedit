@@ -74,3 +74,5 @@ LEFT JOIN users AS liked_by_user ON like_dislike.user_id = liked_by_user.id;
 INSERT INTO like_dislike(user_id,post_id,like) VALUES(
 
 );
+
+SELECT * from like_dislike;
