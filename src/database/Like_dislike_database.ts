@@ -12,6 +12,11 @@ export class Like_dislike_database extends BaseDatabase {
 			.where({ post_id })
 			.andWhere({ user_id });
 	};
+	public TotalFindLike = async (): Promise<like_dislike[]> => {
+		return await BaseDatabase.connection(
+			Like_dislike_database.TABLES_ACCOUNT
+		).where({ like: 1 });
+	};
 	public addLikeInCart = async (data: Like_dislike): Promise<void> => {
 		await BaseDatabase.connection(Like_dislike_database.TABLES_ACCOUNT).insert(
 			data
@@ -27,5 +32,4 @@ export class Like_dislike_database extends BaseDatabase {
 				like: newLike.getLike(),
 			});
 	};
-	// public findLikeByUserId = async (userId: string) => {};
 }
