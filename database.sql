@@ -36,17 +36,17 @@ CREATE TABLE comments (
     FOREIGN KEY (post_id) REFERENCES posts(id)
 );
 
-CREATE TABLE comments_like_dislike (
+CREATE TABLE coments_like_dislike (
     user_id TEXT NOT NULL,
-    comments_id TEXT NOT NULL,
+    coments_id TEXT NOT NULL,
     like INTEGER NOT NULL,
     FOREIGN KEY (user_id) REFERENCES users(id),
-    FOREIGN KEY (comments_id) REFERENCES comments(id)
+    FOREIGN KEY (coments_id) REFERENCES comments(id)
 );
 -- -- ;
 SELECT * from users;
 
-DROP Table users;
+DROP Table comments_like_dislike;
 
 SELECT
  posts.id as post_id,
@@ -75,4 +75,4 @@ INSERT INTO like_dislike(user_id,post_id,like) VALUES(
 
 );
 
-SELECT * from like_dislike;
+SELECT * from coments_like_dislike;

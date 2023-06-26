@@ -5,6 +5,9 @@ import { TokenManager } from '../services/TokenManager';
 import { UserDataBase } from '../database/UserDataBase';
 import { IdGenerator } from '../services/IdGenerator';
 import { PostDataBase } from '../database/PostDataBase';
+import { Like_dislike_database } from '../database/Like_dislike_database';
+import { ComentsDataBase } from '../database/ComentsDataBase';
+import { Like_dislike_coments_database } from '../database/Like_dislike_coments_database';
 
 export const postRouter = Router();
 
@@ -13,7 +16,10 @@ const postController = new PostController(
 		new TokenManager(),
 		new UserDataBase(),
 		new IdGenerator(),
-		new PostDataBase()
+		new PostDataBase(),
+		new Like_dislike_database(),
+		new ComentsDataBase(),
+		new Like_dislike_coments_database()
 	)
 );
 
