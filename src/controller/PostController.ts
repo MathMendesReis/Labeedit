@@ -41,8 +41,23 @@ export class PostController {
 			}
 		}
 	};
-	deletePost = async (req: Request, res: Response) => {
-		return 'ola mundo';
+	findPostById = async (req: Request, res: Response) => {
+		try {
+			const { id } = req.params;
+			const result = await this.postBusinnes.findPostById(id);
+			res.status(200).send(result);
+		} catch (error) {
+			console.log(error);
+			if (error instanceof ZodError) {
+				res
+					.status(400)
+					.json({ error: 'Erro de validação', issues: error.issues });
+			} else if (error instanceof BaseError) {
+				res.status(error.statusCode).json({ error: error.message });
+			} else {
+				res.status(500).json({ error: 'Erro inesperado', message: error });
+			}
+		}
 	};
 	updatePost = async (req: Request, res: Response) => {
 		return 'ola mundo';

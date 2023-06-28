@@ -9,8 +9,8 @@ export class LikeDislikeComentsController {
 	public likeDislike = async (req: Request, res: Response) => {
 		try {
 			const data = inputLikeDislikeComentsSchema.parse(req.body);
-			const result = await this.likeDislikeComentsBusinnes.addNewLike(data);
-			res.status(200).send(result);
+			await this.likeDislikeComentsBusinnes.addNewLike(data);
+			res.status(200).send({ message: 'create like sucessuful' });
 		} catch (error) {
 			console.log(error);
 			if (error instanceof ZodError) {

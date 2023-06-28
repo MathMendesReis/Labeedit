@@ -62,6 +62,34 @@ export class PostBusinnes {
 					...post,
 					likes: totalLikes.length,
 					dislikes: totalDislikes.length,
+					total_coments: comentarios.length,
+				};
+			})
+		);
+
+		return result;
+	};
+
+	public findPostById = async (id: string) => {
+		const postDB = await this.postBaseDataBase.findPostById(id);
+		const result = await Promise.all(
+			postDB.map(async (post) => {
+				const totalLikes = await this.LikeDislikeDataBase.TotalFindLike(
+					post.id,
+					1
+				);
+				const totalDislikes = await this.LikeDislikeDataBase.TotalFindLike(
+					post.id,
+					0
+				);
+				const comentarios = await this.comentsDataBase.findComentsByPostId(
+					post.id
+				);
+				return {
+					...post,
+					likes: totalLikes.length,
+					dislikes: totalDislikes.length,
+					total_coments: comentarios.length,
 					coments: await Promise.all(
 						comentarios.map(async (coments) => {
 							const totalLikesComents =
@@ -69,19 +97,21 @@ export class PostBusinnes {
 									coments.id,
 									1
 								);
-							const id = coments.id;
-							const content = coments.contents;
+							const totalDislikesComents =
+								await this.like_dislike_coments_database.getAllLikesComents(
+									coments.id,
+									1
+								);
 							return {
-								id,
-								content,
+								...coments,
 								likes: totalLikesComents.length,
+								dislikes: totalDislikesComents.length,
 							};
 						})
 					),
 				};
 			})
 		);
-
 		return result;
 	};
 }

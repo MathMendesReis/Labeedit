@@ -24,4 +24,18 @@ export class PostDataBase extends BaseDatabase {
 				`${PostDataBase.TABLE_ACCOUNT_USERS}.id`
 			);
 	};
+	public findPostById = async (id: string): Promise<outoutGetAllPostsDTO[]> => {
+		return await BaseDatabase.connection(PostDataBase.TABLE_ACCOUNT)
+			.where({ 'posts.id': id })
+			.select(
+				`${PostDataBase.TABLE_ACCOUNT}.id`,
+				`${PostDataBase.TABLE_ACCOUNT}.contents`,
+				`${PostDataBase.TABLE_ACCOUNT_USERS}.name as name_user`
+			)
+			.leftJoin(
+				PostDataBase.TABLE_ACCOUNT_USERS,
+				`${PostDataBase.TABLE_ACCOUNT}.user_id`,
+				`${PostDataBase.TABLE_ACCOUNT_USERS}.id`
+			);
+	};
 }
