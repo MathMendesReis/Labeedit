@@ -13,8 +13,8 @@ const LikeDislikeComents_1 = require("./router/LikeDislikeComents");
 const app = (0, express_1.default)();
 app.use(express_1.default.json());
 app.use((0, cors_1.default)());
-app.listen(3003, () => {
-    console.log('Servidor rodando na porta 3003');
+app.listen(Number(process.env.PORT), () => {
+    console.log(`Servidor rodando na porta ${Number(process.env.PORT)}`);
 });
 app.get('/ping', (req, res) => {
     res.send('Pong!');
