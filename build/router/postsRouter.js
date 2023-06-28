@@ -1,0 +1,20 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.postRouter = void 0;
+const express_1 = require("express");
+const PostController_1 = require("../controller/PostController");
+const PostBusinnes_1 = require("../business/PostBusinnes");
+const TokenManager_1 = require("../services/TokenManager");
+const UserDataBase_1 = require("../database/UserDataBase");
+const IdGenerator_1 = require("../services/IdGenerator");
+const PostDataBase_1 = require("../database/PostDataBase");
+const Like_dislike_database_1 = require("../database/Like_dislike_database");
+const ComentsDataBase_1 = require("../database/ComentsDataBase");
+const Like_dislike_coments_database_1 = require("../database/Like_dislike_coments_database");
+exports.postRouter = (0, express_1.Router)();
+const postController = new PostController_1.PostController(new PostBusinnes_1.PostBusinnes(new TokenManager_1.TokenManager(), new UserDataBase_1.UserDataBase(), new IdGenerator_1.IdGenerator(), new PostDataBase_1.PostDataBase(), new Like_dislike_database_1.Like_dislike_database(), new ComentsDataBase_1.ComentsDataBase(), new Like_dislike_coments_database_1.Like_dislike_coments_database()));
+exports.postRouter.post('/createpost', postController.createPost);
+exports.postRouter.get('/:id', postController.findPostById);
+exports.postRouter.get('/', postController.getAllPost);
+exports.postRouter.put('/', postController.updatePost);
+//# sourceMappingURL=postsRouter.js.map
