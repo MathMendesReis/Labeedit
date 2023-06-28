@@ -1,62 +1,49 @@
-export enum Role {
-  // eslint-disable-next-line no-unused-vars
-  USER = 'user',
-  // eslint-disable-next-line no-unused-vars
-  ADMIN = 'admin',
+import { USER_ROLES } from '../services/TokenManager';
+
+export class User {
+	constructor(
+		private id: string,
+		private name: string,
+		private email: string,
+		private password: string,
+		private creation_date: string,
+		private information_update: string,
+		private role: USER_ROLES,
+		private accept_terms: string
+	) {}
+	public getId(): string {
+		return this.id;
+	}
+	public getName(): string {
+		return this.name;
+	}
+	public getEmail(): string {
+		return this.email;
+	}
+	public getPassword(): string {
+		return this.password;
+	}
+	public getCREATION_DATE(): string {
+		return this.creation_date;
+	}
+	public getInformationUpdate(): string {
+		return this.information_update;
+	}
+	public getRole(): USER_ROLES {
+		return this.role;
+	}
+	public getAccept_terms(): string {
+		return this.accept_terms;
+	}
 }
 
-export interface users {
-  id: string;
-  apelido: string;
-  email: string;
-  role: Role;
-  password: string;
-  checkbox: string;
-  created_at: string;
-}
-
-export class Users {
-  constructor(
-    // eslint-disable-next-line no-unused-vars
-    private id: string,
-    // eslint-disable-next-line no-unused-vars
-    private apelido: string,
-    // eslint-disable-next-line no-unused-vars
-    private email: string,
-    // eslint-disable-next-line no-unused-vars
-    private role: Role,
-    // eslint-disable-next-line no-unused-vars
-    private password: string,
-    // eslint-disable-next-line no-unused-vars
-    private checkbox: string,
-    // eslint-disable-next-line no-unused-vars
-    private created_at: string
-  ) {}
-
-  public getId(): string {
-    return this.id;
-  }
-  public getName(): string {
-    return this.apelido;
-  }
-
-  public getCheckbox(): string {
-    return this.checkbox;
-  }
-  public getEmail(): string {
-    return this.email;
-  }
-  public getRole(): Role {
-    return this.role;
-  }
-  public getPassword(): string {
-    return this.password;
-  }
-
-  public getApelido(): string {
-    return this.apelido;
-  }
-  public getCreated_at(): string {
-    return this.created_at;
-  }
+export interface user {
+	id: string;
+	name: string;
+	email: string;
+	password: string;
+	creation_date: string;
+	information_update: string;
+	role: USER_ROLES;
+	accept_terms: string;
 }

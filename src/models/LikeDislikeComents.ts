@@ -1,21 +1,22 @@
-export class Like_dislike {
+export class LikeDislikeComents {
 	constructor(
 		private user_id: string,
-		private post_id: string,
+		private coments_id: string,
 		private like: number
 	) {}
 	public getUser_id(): string {
 		return this.user_id;
 	}
 	public getPost_id(): string {
-		return this.post_id;
+		return this.coments_id;
 	}
 	public getLike(): number {
 		return this.like;
 	}
 }
 
-export interface like_dislike {
+export interface likeDislikeComents {
 	user_id: string;
-	post_id: string;
+	coments_id: string;
+	like: number;
 }

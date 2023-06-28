@@ -1,54 +1,29 @@
-import { InputDelete } from '../DTOs/inputDelete.DTO';
-import { Users, users } from '../models/User';
-import { BaseDatabase } from './BaseDataBase';
+import { User, user } from '../models/User';
+import { BaseDatabase } from './sqlite/Database';
 
 export class UserDataBase extends BaseDatabase {
-  private static TABLE_ACCOUNTS = 'users';
+	private static TABLES_ACCOUNTS = 'users';
 
-  public findUsersByEmail = async (email: string): Promise<users> => {
-    return (
-      await BaseDatabase.connection(UserDataBase.TABLE_ACCOUNTS).where({
-        email,
-      })
-    )[0];
-  };
-  public findUserById = async (id: string | InputDelete): Promise<users> => {
-    return (
-      await BaseDatabase.connection(UserDataBase.TABLE_ACCOUNTS).where({ id })
-    )[0];
-  };
+	// public userLogin = async () => {};
+	public foundUserByEmail = async (email: string): Promise<user> => {
+		//devolve uma array com usuario que tenha o email igual ao do parametro
+		const result = (
+			await BaseDatabase.connection(UserDataBase.TABLES_ACCOUNTS).where({
+				email,
+			})
+		)[0];
+		return result;
+	};
 
-  public insertUserInDB = async (user: Users): Promise<void> => {
-    await BaseDatabase.connection(UserDataBase.TABLE_ACCOUNTS).insert({
-      id: user.getId(),
-      apelido: user.getApelido(),
-      email: user.getEmail(),
-      role: user.getRole(),
-      password: user.getPassword(),
-      checkbox: user.getCheckbox(),
-      created_at: user.getCreated_at(),
-    });
-  };
+	public addNewUserInDB = async (newUser: User): Promise<void> => {
+		await BaseDatabase.connection(UserDataBase.TABLES_ACCOUNTS).insert(newUser);
+	};
 
-  public updateUser = async (user: Users): Promise<void> => {
-    await BaseDatabase.connection(UserDataBase.TABLE_ACCOUNTS)
-      .where({ id: user.getId() })
-      .update({
-        apelido: user.getApelido(),
-        email: user.getEmail(),
-      });
-    return;
-  };
-
-  public deleteUserById = async (id: string): Promise<void> => {
-    return await BaseDatabase.connection(UserDataBase.TABLE_ACCOUNTS)
-      .where({ id })
-      .del();
-  };
-
-  public deleteUserByUserId = async (user_id: string): Promise<void> => {
-    return await BaseDatabase.connection(UserDataBase.TABLE_ACCOUNTS)
-      .where({ user_id })
-      .del();
-  };
+	public foundUserByID = async (id: string): Promise<user> => {
+		return (
+			await BaseDatabase.connection(UserDataBase.TABLES_ACCOUNTS).where({
+				id,
+			})
+		)[0];
+	};
 }

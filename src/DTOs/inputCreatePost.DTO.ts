@@ -1,11 +1,13 @@
-import { ZodType, z } from 'zod';
+import { z } from 'zod';
 
-export interface InputUpsert {
-  content: string;
-  token: string;
+export interface CreatePost {
+	token: string;
+	contents: string;
 }
 
-export const inputDTOSchemma: ZodType<InputUpsert> = z.object({
-  content: z.string(),
-  token: z.string().nonempty('user_id é um campo obrigatório '),
-});
+export const createPostSchemma = z
+	.object({
+		token: z.string().nonempty(),
+		contents: z.string().nonempty(),
+	})
+	.transform((data) => data as CreatePost);
