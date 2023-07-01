@@ -8,7 +8,11 @@ export class ComentsController {
 	constructor(private comentsBusinnes: ComentsBusiness) {}
 	public createNewComents = async (req: Request, res: Response) => {
 		try {
-			const data = InputCreateComentsSchema.parse(req.body);
+			const data = InputCreateComentsSchema.parse({
+				authorization: req.headers.authorization,
+				id: req.body.id,
+				contents: req.body.contents,
+			});
 			const result = await this.comentsBusinnes.addComentInDB(data);
 			res.status(200).send(result);
 		} catch (error) {

@@ -4,9 +4,7 @@ import { BaseDatabase } from './sqlite/Database';
 export class UserDataBase extends BaseDatabase {
 	private static TABLES_ACCOUNTS = 'users';
 
-	// public userLogin = async () => {};
 	public foundUserByEmail = async (email: string): Promise<user> => {
-		//devolve uma array com usuario que tenha o email igual ao do parametro
 		const result = (
 			await BaseDatabase.connection(UserDataBase.TABLES_ACCOUNTS).where({
 				email,

@@ -1,4 +1,5 @@
 import { InputLikeDislike } from '../DTOs/InputLike.DTO';
+import { OutOutAddComentInDb } from '../DTOs/OutputAddComentInDB.DTO';
 import { Like_dislike_database } from '../database/Like_dislike_database';
 import { BadRequestError } from '../error/BadRequestError';
 import { Like_dislike } from '../models/LikeDislike';
@@ -9,8 +10,8 @@ export class Like_dislike_businnes {
 		private tokenManager: TokenManager,
 		private likeDislikeDataBase: Like_dislike_database // private postBusiness: PostBusinnes
 	) {}
-	addNewLike = async (data: InputLikeDislike) => {
-		const payload = this.tokenManager.getPayload(data.token);
+	addNewLike = async (data: InputLikeDislike): Promise<OutOutAddComentInDb> => {
+		const payload = this.tokenManager.getPayload(data.authorization);
 		if (payload === null) {
 			throw new BadRequestError('invalid token');
 		}
@@ -25,6 +26,8 @@ export class Like_dislike_businnes {
 			await this.likeDislikeDataBase.addLikeInCart(newLikeDB);
 		}
 
-		return 'sucesso';
+		return {
+			message: 'Create Post sucessuful',
+		};
 	};
 }

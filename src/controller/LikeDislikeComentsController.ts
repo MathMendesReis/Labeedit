@@ -8,9 +8,13 @@ export class LikeDislikeComentsController {
 	constructor(private likeDislikeComentsBusinnes: LikeDislikeComentsBusinnes) {}
 	public likeDislike = async (req: Request, res: Response) => {
 		try {
-			const data = inputLikeDislikeComentsSchema.parse(req.body);
-			await this.likeDislikeComentsBusinnes.addNewLike(data);
-			res.status(200).send({ message: 'create like sucessuful' });
+			const data = inputLikeDislikeComentsSchema.parse({
+				authorization: req.headers.authorization,
+				coments_id: req.body.coments_id,
+				like: req.body.like,
+			});
+			const response = await this.likeDislikeComentsBusinnes.addNewLike(data);
+			res.status(200).send(response);
 		} catch (error) {
 			console.log(error);
 			if (error instanceof ZodError) {

@@ -59,7 +59,7 @@ SUM(CASE WHEN like_dislike.like IS NULL THEN 1 ELSE 0 END) AS nulo
  from posts
 LEFT join like_dislike ON posts.id = like_dislike.post_id;
 
-DELETE from  comments;
+select * from  coments_like_dislike;
 
 SELECT 
 posts.id,
@@ -75,4 +75,4 @@ INSERT INTO like_dislike(user_id,post_id,like) VALUES(
 
 );
 
-SELECT * from coments_like_dislike;
+SELECT * from comments;

@@ -7,7 +7,7 @@ export class ComentsDataBase extends BaseDatabase {
 	public addComents = async (data: Coments) => {
 		await BaseDatabase.connection(ComentsDataBase.TABLES_ACCOUNT).insert(data);
 	};
-	public findComentsByPostId = async (post_id: string) => {
+	public findComentsByPostId = async (post_id: string): Promise<Coments[]> => {
 		return await BaseDatabase.connection(ComentsDataBase.TABLES_ACCOUNT)
 			.select('comments.id', 'comments.contents', 'users.name as name_user')
 			.leftJoin('users', 'comments.user_id', 'users.id')

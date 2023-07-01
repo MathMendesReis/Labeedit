@@ -10,10 +10,10 @@ export class UserController {
 	public userLogin = async (req: Request, res: Response): Promise<void> => {
 		try {
 			const { email, password } = inputLoginSchema.parse(req.body);
-			const response = await this.userBusiness.userLogin(email, password);
-			res.status(200).send(response);
+			res.setHeader('Content-Type', 'application/json');
+			const loginResponse = await this.userBusiness.userLogin(email, password);
+			res.status(200).send(loginResponse);
 		} catch (error) {
-			console.log(error);
 			if (error instanceof ZodError) {
 				res
 					.status(400)
@@ -29,13 +29,14 @@ export class UserController {
 		try {
 			const { name, email, password, accept_terms } =
 				CreateAccountSchemma.parse(req.body);
-			const response = await this.userBusiness.createAccount(
+			const accountCreationResponse = await this.userBusiness.createAccount(
 				name,
 				email,
 				password,
 				accept_terms
 			);
-			res.status(200).send(response);
+			res.setHeader('Content-Type', 'application/json');
+			res.status(201).send(accountCreationResponse);
 		} catch (error) {
 			console.log(error);
 			if (error instanceof ZodError) {

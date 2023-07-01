@@ -17,5 +17,5 @@ const userController = new UserController(
 	)
 );
 
-userRouter.post('/login', userController.userLogin);
-userRouter.post('/createAccount', userController.createAccount);
+userRouter.get('/', userController.userLogin);
+userRouter.post('/', userController.createAccount);
