@@ -7,7 +7,7 @@ export class LikeDislikeComents {
 	public getUser_id(): string {
 		return this.user_id;
 	}
-	public getPost_id(): string {
+	public getComents_id(): string {
 		return this.coments_id;
 	}
 	public getLike(): number {

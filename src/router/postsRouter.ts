@@ -23,7 +23,6 @@ const postController = new PostController(
 	)
 );
 
-postRouter.post('/createpost', postController.createPost);
+postRouter.post('/', postController.createPost);
 postRouter.get('/:id', postController.findPostById);
 postRouter.get('/', postController.getAllPost);
-postRouter.put('/', postController.updatePost);

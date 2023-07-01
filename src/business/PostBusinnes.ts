@@ -9,6 +9,8 @@ import { IdGenerator } from '../services/IdGenerator';
 import { TokenManager } from '../services/TokenManager';
 import { ComentsDataBase } from '../database/ComentsDataBase';
 import { Like_dislike_coments_database } from '../database/Like_dislike_coments_database';
+import { CreatePost } from '../DTOs/inputCreatePost.DTO';
+import { outoutGetAllPostsDTO } from '../DTOs/OutputGetAllPosts.DTO';
 
 export class PostBusinnes {
 	constructor(
@@ -20,11 +22,11 @@ export class PostBusinnes {
 		private comentsDataBase: ComentsDataBase,
 		private like_dislike_coments_database: Like_dislike_coments_database
 	) {}
-	public createNewPost = async (
-		token: string,
-		contents: string
-	): Promise<void> => {
-		const payload = this.tokenManager.getPayload(token);
+	public createNewPost = async ({
+		authorization,
+		contents,
+	}: CreatePost): Promise<void> => {
+		const payload = this.tokenManager.getPayload(authorization);
 		if (payload === null) {
 			throw new BadRequestError('invalid token');
 		}
@@ -43,8 +45,16 @@ export class PostBusinnes {
 		await this.postBaseDataBase.addPostInDB(newPost);
 	};
 
-	public getAllPosts = async () => {
+	public getAllPosts = async (
+		authorization: string,
+		id?: string
+	): Promise<outoutGetAllPostsDTO[]> => {
+		const payload = this.tokenManager.getPayload(authorization);
+		if (payload === null) {
+			throw new BadRequestError('invalid token');
+		}
 		const postDB = await this.postBaseDataBase.getAllPosts();
+
 		const result = await Promise.all(
 			postDB.map(async (post) => {
 				const totalLikes = await this.LikeDislikeDataBase.TotalFindLike(
@@ -70,8 +80,8 @@ export class PostBusinnes {
 		return result;
 	};
 
-	public findPostById = async (id: string) => {
-		const postDB = await this.postBaseDataBase.findPostById(id);
+	public findPostById = async (id: string): Promise<outoutGetAllPostsDTO[]> => {
+		const postDB = await this.postBaseDataBase.getAllPosts(id);
 		const result = await Promise.all(
 			postDB.map(async (post) => {
 				const totalLikes = await this.LikeDislikeDataBase.TotalFindLike(
@@ -100,7 +110,7 @@ export class PostBusinnes {
 							const totalDislikesComents =
 								await this.like_dislike_coments_database.getAllLikesComents(
 									coments.id,
-									1
+									0
 								);
 							return {
 								...coments,

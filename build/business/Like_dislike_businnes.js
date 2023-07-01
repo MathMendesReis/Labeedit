@@ -29,7 +29,9 @@ class Like_dislike_businnes {
             else {
                 yield this.likeDislikeDataBase.addLikeInCart(newLikeDB);
             }
-            return 'sucesso';
+            return {
+                message: 'Create Post sucessuful',
+            };
         });
     }
 }

@@ -24,11 +24,14 @@ class LikeDislikeComentsBusinnes {
             const [verification] = yield this.likeDislikeComentsDataBse.findLikeByUserIdAndComentsID(payload.id, data.coments_id);
             const newLike = new LikeDislikeComents_1.LikeDislikeComents(payload.id, data.coments_id, data.like);
             if (verification) {
-                return yield this.likeDislikeComentsDataBse.updateLike(newLike);
+                yield this.likeDislikeComentsDataBse.updateLike(newLike);
             }
             else {
-                return yield this.likeDislikeComentsDataBse.addNewLike(newLike);
+                yield this.likeDislikeComentsDataBse.addNewLike(newLike);
             }
+            return {
+                message: 'Create Post sucessuful',
+            };
         });
     }
 }

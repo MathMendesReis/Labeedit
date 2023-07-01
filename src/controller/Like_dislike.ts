@@ -8,7 +8,11 @@ export class Like_dislikeController {
 	constructor(private likeDislikeBusinnes: Like_dislike_businnes) {}
 	public likeDislike = async (req: Request, res: Response) => {
 		try {
-			const data = inputLikeDislikeSchema.parse(req.body);
+			const data = inputLikeDislikeSchema.parse({
+				authorization: req.headers.authorization,
+				post_id: req.body.post_id,
+				like: req.body.like,
+			});
 			const result = await this.likeDislikeBusinnes.addNewLike(data);
 			res.status(200).send(result);
 		} catch (error) {

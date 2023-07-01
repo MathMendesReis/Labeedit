@@ -8,9 +8,12 @@ export class PostController {
 	constructor(private postBusinnes: PostBusinnes) {}
 	createPost = async (req: Request, res: Response) => {
 		try {
-			const { token, contents } = createPostSchemma.parse(req.body);
-			await this.postBusinnes.createNewPost(token, contents);
-			res.status(200).send({ message: 'create new post sucessulf' });
+			const input = createPostSchemma.parse({
+				authorization: req.headers.authorization,
+				contents: req.body.contents,
+			});
+			await this.postBusinnes.createNewPost(input);
+			res.status(201).send({ message: 'Create post sucessul' });
 		} catch (error) {
 			console.log(error);
 			if (error instanceof ZodError) {
@@ -26,7 +29,9 @@ export class PostController {
 	};
 	getAllPost = async (req: Request, res: Response) => {
 		try {
-			const result = await this.postBusinnes.getAllPosts();
+			const authorization = req.headers.authorization as string;
+			const { id } = req.params;
+			const result = await this.postBusinnes.getAllPosts(authorization, id);
 			res.status(200).send(result);
 		} catch (error) {
 			console.log(error);
@@ -58,8 +63,5 @@ export class PostController {
 				res.status(500).json({ error: 'Erro inesperado', message: error });
 			}
 		}
-	};
-	updatePost = async (req: Request, res: Response) => {
-		return 'ola mundo';
 	};
 }

@@ -15,7 +15,7 @@ export class ComentsBusiness {
 	public addComentInDB = async (
 		data: inputComents
 	): Promise<OutOutAddComentInDb> => {
-		const payload = this.tokenMnager.getPayload(data.token);
+		const payload = this.tokenMnager.getPayload(data.authorization);
 		if (payload === null) {
 			throw new BadRequestError('token invalido');
 		}
