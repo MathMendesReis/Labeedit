@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import { UserController } from '../controller/UsersController';
-import { UserBusinnes } from '../business/UserBusinnes';
+import { UserBusinnes } from '../business/UserBusines';
 import { UserDataBase } from '../database/UserDataBase';
 import { IdGenerator } from '../services/IdGenerator';
 import { TokenManager } from '../services/TokenManager';

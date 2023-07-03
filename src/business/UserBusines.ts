@@ -3,7 +3,7 @@ import { OutputUserLogin } from '../DTOs/outputUserLogin.DTO';
 import { UserDataBase } from '../database/UserDataBase';
 import { BadRequestError } from '../error/BadRequestError';
 import { NotFoundError } from '../error/NotFoundError';
-import { User } from '../models/User';
+import { User, user } from '../models/User';
 import { HashManager } from '../services/HashManager';
 import { IdGenerator } from '../services/IdGenerator';
 import {
@@ -12,7 +12,7 @@ import {
 	USER_ROLES,
 } from '../services/TokenManager';
 
-export class UserBusinnes {
+export class UserBusines {
 	constructor(
 		private userDataBase: UserDataBase,
 		private idGenerator: IdGenerator,
@@ -24,7 +24,6 @@ export class UserBusinnes {
 		email: string,
 		password: string
 	): Promise<OutputUserLogin> => {
-		//verificar se o usuario e cadastrado pelo email
 		const userDB = await this.userDataBase.foundUserByEmail(email);
 		if (!userDB) {
 			throw new NotFoundError('Not found Email');
@@ -70,7 +69,17 @@ export class UserBusinnes {
 			USER_ROLES.NORMAL,
 			accept_terms
 		);
-		await this.userDataBase.addNewUserInDB(newUser);
+		const insertUser: user = {
+			id: newUser.getId(),
+			name: newUser.getName(),
+			email: newUser.getEmail(),
+			password: newUser.getPassword(),
+			creation_date: newUser.getPassword(),
+			information_update: newUser.getCREATION_DATE(),
+			role: newUser.getRole(),
+			accept_terms: newUser.getAccept_terms(),
+		};
+		await this.userDataBase.addNewUserInDB(insertUser);
 		return {
 			message: 'successful registration',
 		};

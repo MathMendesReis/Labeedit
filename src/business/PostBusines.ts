@@ -104,12 +104,12 @@ export class PostBusinnes {
 						comentarios.map(async (coments) => {
 							const totalLikesComents =
 								await this.like_dislike_coments_database.getAllLikesComents(
-									coments.id,
+									id,
 									1
 								);
 							const totalDislikesComents =
 								await this.like_dislike_coments_database.getAllLikesComents(
-									coments.id,
+									id,
 									0
 								);
 							return {
