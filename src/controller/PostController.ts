@@ -2,7 +2,7 @@ import { Request, Response } from 'express';
 import { createPostSchemma } from '../DTOs/inputCreatePost.DTO';
 import { ZodError } from 'zod';
 import { BaseError } from '../error/BaseError';
-import { PostBusinnes } from '../business/PostBusinnes';
+import { PostBusinnes } from '../business/PostBusines';
 
 export class PostController {
 	constructor(private postBusinnes: PostBusinnes) {}

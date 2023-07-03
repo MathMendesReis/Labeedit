@@ -1,4 +1,4 @@
-import { User, user } from '../models/User';
+import { user } from '../models/User';
 import { BaseDatabase } from './sqlite/Database';
 
 export class UserDataBase extends BaseDatabase {
@@ -13,7 +13,7 @@ export class UserDataBase extends BaseDatabase {
 		return result;
 	};
 
-	public addNewUserInDB = async (newUser: User): Promise<void> => {
+	public addNewUserInDB = async (newUser: user): Promise<void> => {
 		await BaseDatabase.connection(UserDataBase.TABLES_ACCOUNTS).insert(newUser);
 	};
 

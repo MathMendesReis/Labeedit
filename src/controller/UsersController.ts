@@ -1,17 +1,17 @@
 import { Request, Response } from 'express';
-import { UserBusinnes } from '../business/UserBusinnes';
+import { UserBusines } from '../business/UserBusines';
 import { inputLoginSchema } from '../DTOs/InputLogin.DTO';
 import { ZodError } from 'zod';
 import { BaseError } from '../error/BaseError';
 import { CreateAccountSchemma } from '../DTOs/InputCreateAccount.DTO';
 
 export class UserController {
-	constructor(private userBusiness: UserBusinnes) {}
+	constructor(private userBusines: UserBusines) {}
 	public userLogin = async (req: Request, res: Response): Promise<void> => {
 		try {
 			const { email, password } = inputLoginSchema.parse(req.body);
 			res.setHeader('Content-Type', 'application/json');
-			const loginResponse = await this.userBusiness.userLogin(email, password);
+			const loginResponse = await this.userBusines.userLogin(email, password);
 			res.status(200).send(loginResponse);
 		} catch (error) {
 			if (error instanceof ZodError) {
@@ -29,7 +29,7 @@ export class UserController {
 		try {
 			const { name, email, password, accept_terms } =
 				CreateAccountSchemma.parse(req.body);
-			const accountCreationResponse = await this.userBusiness.createAccount(
+			const accountCreationResponse = await this.userBusines.createAccount(
 				name,
 				email,
 				password,

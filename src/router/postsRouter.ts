@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import { PostController } from '../controller/PostController';
-import { PostBusinnes } from '../business/PostBusinnes';
+import { PostBusinnes } from '../business/PostBusines';
 import { TokenManager } from '../services/TokenManager';
 import { UserDataBase } from '../database/UserDataBase';
 import { IdGenerator } from '../services/IdGenerator';
