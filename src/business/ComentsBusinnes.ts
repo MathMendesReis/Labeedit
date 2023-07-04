@@ -12,6 +12,15 @@ export class ComentsBusiness {
 		private comentsDataBase: ComentsDataBase,
 		private idGenarator: IdGenerator
 	) {}
+	/**
+	 * Cria uma novo post.
+	 * @param data Data possui tres atributos
+	 *  id: id do post que ta sendo comentado;
+		authorization: token do usuario;
+		contents: conteudo do post;
+	 * @throws BadRequestError Se o token for invalido.
+	 * @returns retornar um post especifico,juntos com seus comentarios em um array.
+	 */
 	public addComentInDB = async (
 		data: inputComents
 	): Promise<OutOutAddComentInDb> => {

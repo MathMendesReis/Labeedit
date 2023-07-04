@@ -11,7 +11,7 @@ export class UserController {
 		try {
 			const { email, password } = inputLoginSchema.parse(req.body);
 			res.setHeader('Content-Type', 'application/json');
-			const loginResponse = await this.userBusines.userLogin(email, password);
+			const loginResponse = await this.userBusines.login(email, password);
 			res.status(200).send(loginResponse);
 		} catch (error) {
 			if (error instanceof ZodError) {
