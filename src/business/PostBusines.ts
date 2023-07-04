@@ -22,6 +22,14 @@ export class PostBusinnes {
 		private comentsDataBase: ComentsDataBase,
 		private like_dislike_coments_database: Like_dislike_coments_database
 	) {}
+	/**
+	 * Cria uma novo post.
+	 * @param authorization Token do usuaro.
+	 * @param contents Conteudo do post.
+	 * @throws BadRequestError Se o token for invalido.
+	 * @throws NotFoundError Se o usuario não for encontrado.
+	 * @returns vazio.
+	 */
 	public createNewPost = async ({
 		authorization,
 		contents,
@@ -45,9 +53,14 @@ export class PostBusinnes {
 		await this.postBaseDataBase.addPostInDB(newPost);
 	};
 
+	/**
+	 * Cria uma novo post.
+	 * @param authorization Token do usuario.
+	 * @throws BadRequestError Se o token for invalido.
+	 * @returns array de posts.
+	 */
 	public getAllPosts = async (
-		authorization: string,
-		id?: string
+		authorization: string
 	): Promise<outoutGetAllPostsDTO[]> => {
 		const payload = this.tokenManager.getPayload(authorization);
 		if (payload === null) {
@@ -80,6 +93,12 @@ export class PostBusinnes {
 		return result;
 	};
 
+	/**
+	 * Cria uma novo post.
+	 * @param id Id do post.
+	 * @throws BadRequestError Se o token for invalido.
+	 * @returns retornar um post especifico,juntos com seus comentarios em um array.
+	 */
 	public findPostById = async (id: string): Promise<outoutGetAllPostsDTO[]> => {
 		const postDB = await this.postBaseDataBase.getAllPosts(id);
 		const result = await Promise.all(

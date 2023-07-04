@@ -8,8 +8,16 @@ import { TokenManager } from '../services/TokenManager';
 export class Like_dislike_businnes {
 	constructor(
 		private tokenManager: TokenManager,
-		private likeDislikeDataBase: Like_dislike_database // private postBusiness: PostBusinnes
+		private likeDislikeDataBase: Like_dislike_database
 	) {}
+	/**
+	 * Cria uma novo post.
+	 * @param authorization Token do usuario.
+	 * @throws BadRequestError Se o token for invalido.
+	 * @returns caso o usuario já tenha dado o like ou o dislike,
+	 * o valor e atualizado na tabela, caso contrario, é inserido um novo registro.
+	 * @observação 0 = dislike/ 1 = like
+	 */
 	addNewLike = async (data: InputLikeDislike): Promise<OutOutAddComentInDb> => {
 		const payload = this.tokenManager.getPayload(data.authorization);
 		if (payload === null) {

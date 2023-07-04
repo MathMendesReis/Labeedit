@@ -11,6 +11,15 @@ export class LikeDislikeComentsBusinnes {
 		private tokenManager: TokenManager,
 		private likeDislikeComentsDataBse: Like_dislike_coments_database
 	) {}
+
+	/**
+	 * Cria uma novo post.
+	 * @param authorization Token do usuario.
+	 * @throws BadRequestError Se o token for invalido.
+	 * @returns caso o usuario já tenha dado o like ou o dislike,
+	 * o valor e atualizado na tabela, caso contrario, é inserido um novo registro.
+	 * @observação 0 = dislike/ 1 = like
+	 */
 	public addNewLike = async (
 		data: InputLikeDislikeComents
 	): Promise<OutOutAddComentInDb | any> => {

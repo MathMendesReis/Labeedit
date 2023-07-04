@@ -20,7 +20,15 @@ export class UserBusines {
 		private hashManager: HashManager
 	) {}
 
-	public userLogin = async (
+	/**
+	 * Realiza o login do usuário com o email e senha fornecidos.
+	 * @param email O email do usuário.
+	 * @param password A senha do usuário.
+	 * @throws NotFoundError Se o usuário não for encontrado pelo email fornecido.
+	 * @throws BadRequestError Se a senha fornecida estiver incorreta.
+	 * @returns Um objeto contendo o token de autenticação.
+	 */
+	public login = async (
 		email: string,
 		password: string
 	): Promise<OutputUserLogin> => {
@@ -49,6 +57,15 @@ export class UserBusines {
 			token,
 		};
 	};
+	/**
+	 * Cria uma nova conta de usuário.
+	 * @param name O nome do usuário.
+	 * @param email O email do usuário.
+	 * @param password A senha do usuário.
+	 * @param accept_terms A aceitação dos termos de uso.
+	 * @throws BadRequestError Se o email fornecido já estiver registrado.
+	 * @returns Uma mensagem de sucesso ou um objeto de erro.
+	 */
 	public createAccount = async (
 		name: string,
 		email: string,
