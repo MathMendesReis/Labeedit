@@ -1,27 +1,42 @@
-import { user } from '../models/User';
+import { userDB } from '../models/User';
 import { BaseDatabase } from './sqlite/Database';
 
 export class UserDataBase extends BaseDatabase {
 	private static TABLES_ACCOUNTS = 'users';
 
-	public foundUserByEmail = async (email: string): Promise<user> => {
-		const result = (
-			await BaseDatabase.connection(UserDataBase.TABLES_ACCOUNTS).where({
+	public findEmail = async (email: string): Promise<userDB | undefined> => {
+		return (
+			await UserDataBase.connection(UserDataBase.TABLES_ACCOUNTS).where({
 				email,
 			})
 		)[0];
-		return result;
 	};
-
-	public addNewUserInDB = async (newUser: user): Promise<void> => {
-		await BaseDatabase.connection(UserDataBase.TABLES_ACCOUNTS).insert(newUser);
-	};
-
-	public foundUserByID = async (id: string): Promise<user> => {
+	public findUserId = async (id: string): Promise<userDB | undefined> => {
 		return (
-			await BaseDatabase.connection(UserDataBase.TABLES_ACCOUNTS).where({
+			await UserDataBase.connection(UserDataBase.TABLES_ACCOUNTS).where({
 				id,
 			})
 		)[0];
+	};
+	public getUserDB = async (email: string): Promise<userDB | undefined> => {
+		return (
+			await UserDataBase.connection(UserDataBase.TABLES_ACCOUNTS).where({
+				email,
+			})
+		)[0];
+	};
+	public compareUser = async (
+		email: string,
+		password: string
+	): Promise<userDB | undefined> => {
+		return (
+			await UserDataBase.connection(UserDataBase.TABLES_ACCOUNTS).where({
+				email,
+				password,
+			})
+		)[0];
+	};
+	public insertUser = async (user: userDB): Promise<void> => {
+		await UserDataBase.connection(UserDataBase.TABLES_ACCOUNTS).insert(user);
 	};
 }

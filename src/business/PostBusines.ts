@@ -1,16 +1,13 @@
-import { promise } from 'zod';
 import { Like_dislike_database } from '../database/Like_dislike_database';
 import { PostDataBase } from '../database/PostDataBase';
 import { UserDataBase } from '../database/UserDataBase';
-import { BadRequestError } from '../error/BadRequestError';
-import { NotFoundError } from '../error/NotFoundError';
-import { Post } from '../models/Post';
 import { IdGenerator } from '../services/IdGenerator';
 import { TokenManager } from '../services/TokenManager';
-import { ComentsDataBase } from '../database/ComentsDataBase';
 import { Like_dislike_coments_database } from '../database/Like_dislike_coments_database';
-import { CreatePost } from '../DTOs/inputCreatePost.DTO';
-import { outoutGetAllPostsDTO } from '../DTOs/OutputGetAllPosts.DTO';
+import { NotFoundError } from '../error/NotFoundError';
+import { Post, likesDislikes, PostDB } from '../models/Post';
+import { BadRequestError } from '../error/BadRequestError';
+import { createPostOutputDTO } from '../Dtos/posts/createPostOutputDTO';
 
 export class PostBusinnes {
 	constructor(
@@ -19,128 +16,122 @@ export class PostBusinnes {
 		private idGenerator: IdGenerator,
 		private postBaseDataBase: PostDataBase,
 		private LikeDislikeDataBase: Like_dislike_database,
-		private comentsDataBase: ComentsDataBase,
 		private like_dislike_coments_database: Like_dislike_coments_database
 	) {}
-	/**
-	 * Cria uma novo post.
-	 * @param authorization Token do usuaro.
-	 * @param contents Conteudo do post.
-	 * @throws BadRequestError Se o token for invalido.
-	 * @throws NotFoundError Se o usuario não for encontrado.
-	 * @returns vazio.
-	 */
-	public createNewPost = async ({
-		authorization,
-		contents,
-	}: CreatePost): Promise<void> => {
+
+	public insertPost = async (authorization: string, contents: string) => {
 		const payload = this.tokenManager.getPayload(authorization);
 		if (payload === null) {
 			throw new BadRequestError('invalid token');
 		}
-		const userDB = await this.userDataBase.foundUserByID(payload.id);
-		if (!userDB) {
-			throw new NotFoundError('user not found');
+		const isUser = await this.userDataBase.findUserId(payload.id);
+		if (!isUser) {
+			throw new NotFoundError('Not Found User');
 		}
+		const id = this.idGenerator.generate();
 
 		const newPost = new Post(
-			this.idGenerator.generate(),
+			id,
 			payload.id,
 			contents,
-			new Date().toString(),
-			new Date().toString()
+			new Date().toISOString(),
+			new Date().toISOString(),
+			0,
+			0
 		);
-		await this.postBaseDataBase.addPostInDB(newPost);
+		await this.postBaseDataBase.insertPost(newPost.postModel());
+
+		const output: createPostOutputDTO = {
+			message: 'create post sucessulfuly',
+		};
+
+		return output;
 	};
 
-	/**
-	 * Cria uma novo post.
-	 * @param authorization Token do usuario.
-	 * @throws BadRequestError Se o token for invalido.
-	 * @returns array de posts.
-	 */
-	public getAllPosts = async (
-		authorization: string
-	): Promise<outoutGetAllPostsDTO[]> => {
+	public getAllPosts = async (authorization: string): Promise<PostDB[]> => {
 		const payload = this.tokenManager.getPayload(authorization);
 		if (payload === null) {
 			throw new BadRequestError('invalid token');
 		}
-		const postDB = await this.postBaseDataBase.getAllPosts();
+		return await this.postBaseDataBase.getAllPosts();
+	};
 
-		const result = await Promise.all(
-			postDB.map(async (post) => {
-				const totalLikes = await this.LikeDislikeDataBase.TotalFindLike(
-					post.id,
-					1
-				);
-				const totalDislikes = await this.LikeDislikeDataBase.TotalFindLike(
-					post.id,
-					0
-				);
-				const comentarios = await this.comentsDataBase.findComentsByPostId(
-					post.id
-				);
-				return {
-					...post,
-					likes: totalLikes.length,
-					dislikes: totalDislikes.length,
-					total_coments: comentarios.length,
-				};
-			})
-		);
-
+	public findPostById = async (authorization: string, post_id: string) => {
+		const payload = this.tokenManager.getPayload(authorization);
+		if (payload === null) {
+			throw new BadRequestError('invalid token');
+		}
+		const result = await this.postBaseDataBase.postById(post_id);
+		if (!result) {
+			throw new NotFoundError('Not found post');
+		}
 		return result;
 	};
 
-	/**
-	 * Cria uma novo post.
-	 * @param id Id do post.
-	 * @throws BadRequestError Se o token for invalido.
-	 * @returns retornar um post especifico,juntos com seus comentarios em um array.
-	 */
-	public findPostById = async (id: string): Promise<outoutGetAllPostsDTO[]> => {
-		const postDB = await this.postBaseDataBase.getAllPosts(id);
-		const result = await Promise.all(
-			postDB.map(async (post) => {
-				const totalLikes = await this.LikeDislikeDataBase.TotalFindLike(
-					post.id,
-					1
-				);
-				const totalDislikes = await this.LikeDislikeDataBase.TotalFindLike(
-					post.id,
-					0
-				);
-				const comentarios = await this.comentsDataBase.findComentsByPostId(
-					post.id
-				);
-				return {
-					...post,
-					likes: totalLikes.length,
-					dislikes: totalDislikes.length,
-					total_coments: comentarios.length,
-					coments: await Promise.all(
-						comentarios.map(async (coments) => {
-							const totalLikesComents =
-								await this.like_dislike_coments_database.getAllLikesComents(
-									id,
-									1
-								);
-							const totalDislikesComents =
-								await this.like_dislike_coments_database.getAllLikesComents(
-									id,
-									0
-								);
-							return {
-								...coments,
-								likes: totalLikesComents.length,
-								dislikes: totalDislikesComents.length,
-							};
-						})
-					),
-				};
-			})
+	public addLikeDislike = async (
+		authorization: string,
+		post_id: string,
+		like: number
+	) => {
+		const payload = this.tokenManager.getPayload(authorization);
+		if (payload === null) {
+			throw new BadRequestError('invalid token');
+		}
+		const postDB = await this.postBaseDataBase.postById(post_id);
+		if (!postDB) {
+			throw new NotFoundError('Not found post');
+		}
+
+		const newLike: likesDislikes = {
+			user_id: payload.id,
+			post_id,
+			like,
+		};
+
+		const post = new Post(
+			postDB.id,
+			postDB.user_id,
+			postDB.contents,
+			postDB.creation_date,
+			postDB.information_update,
+			postDB.likes,
+			postDB.dislikes
 		);
-		return result;
+		const isLike = await this.postBaseDataBase.getLike(payload.id, post_id);
+		if (isLike) {
+			if (isLike.like === like) {
+				if (like === 0 && (postDB.likes > 0 || postDB.dislikes > 0)) {
+					post.removeDislike();
+				}
+				if (like === 1 && (postDB.likes > 0 || postDB.dislikes > 0)) {
+					post.removeLike();
+				}
+				await this.postBaseDataBase.deleteLike(payload.id, post_id, like);
+			} else {
+				await this.postBaseDataBase.updateLike(newLike);
+				if (like === 0 && (postDB.likes > 0 || postDB.dislikes > 0)) {
+					post.removeDislike();
+					post.addLike();
+				}
+				if (like === 1 && (postDB.likes > 0 || postDB.dislikes > 0)) {
+					post.removeLike();
+					post.addDislike();
+				}
+			}
+		} else {
+			if (like === 0 && (postDB.likes > 0 || postDB.dislikes > 0)) {
+				post.addDislike();
+			}
+			if (like === 1 && (postDB.likes > 0 || postDB.dislikes > 0)) {
+				post.addLike();
+			}
+			await this.postBaseDataBase.insertLike(newLike);
+		}
+
+		await this.postBaseDataBase.updatePost(post.postModel());
+
+		return {
+			post: post.postModel(),
+		};
 	};
 }

@@ -1,15 +1,15 @@
 import { Router } from 'express';
 import { UserController } from '../controller/UsersController';
-import { UserBusinnes } from '../business/UserBusines';
 import { UserDataBase } from '../database/UserDataBase';
 import { IdGenerator } from '../services/IdGenerator';
 import { TokenManager } from '../services/TokenManager';
 import { HashManager } from '../services/HashManager';
+import { UserBusines } from '../business/UserBusines';
 
 export const userRouter = Router();
 
 const userController = new UserController(
-	new UserBusinnes(
+	new UserBusines(
 		new UserDataBase(),
 		new IdGenerator(),
 		new TokenManager(),
@@ -17,5 +17,5 @@ const userController = new UserController(
 	)
 );
 
-userRouter.get('/', userController.userLogin);
-userRouter.post('/', userController.createAccount);
+userRouter.post('/', userController.createdUser);
+userRouter.get('/', userController.login);
