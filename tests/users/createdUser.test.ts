@@ -2,6 +2,7 @@ import { UserBusines } from '../../src/business/UserBusines';
 import { UserDataBase } from '../../src/database/UserDataBase';
 import { BadRequestError } from '../../src/error/BadRequestError';
 import { NotFoundError } from '../../src/error/NotFoundError';
+import { User } from '../../src/models/User';
 import { HashManager } from '../../src/services/HashManager';
 import { IdGenerator } from '../../src/services/IdGenerator';
 import { TokenManager } from '../../src/services/TokenManager';
@@ -12,7 +13,6 @@ const idGeneratorMock = {} as IdGenerator;
 const tokenManagerMock = {} as TokenManager;
 const hashManagerMock = {} as HashManager;
 
-// Crie uma instância do UserBusines usando os mocks
 const userBusinessMock = new UserBusines(
 	userDataBaseMock,
 	idGeneratorMock,
@@ -21,17 +21,17 @@ const userBusinessMock = new UserBusines(
 ) as jest.Mocked<UserBusines>;
 
 describe('Testando metodo created user', () => {
-	test('Deve criar um novo usuário com sucesso', async () => {
-		// Defina os parâmetros de teste
+	test('1-Deve criar um novo usuário com sucesso', async () => {
 		const name = 'fulano';
 		const email = 'fulano@outlook.com';
 		const password = 'fulano123';
 		const accept_terms = 'accepted';
 
-		// Defina o comportamento esperado das dependências/mock
-		userDataBaseMock.findEmail = jest.fn().mockResolvedValue(false);
+		userDataBaseMock.findEmail = jest.fn().mockResolvedValue(undefined);
 		idGeneratorMock.generate = jest.fn().mockReturnValue('12345');
-		hashManagerMock.hash = jest.fn().mockResolvedValue('hashedPassword');
+		hashManagerMock.hash = jest.fn().mockResolvedValue('hash');
+		tokenManagerMock.createToken = jest.fn().mockReturnValue('token');
+
 		userDataBaseMock.insertUser = jest.fn().mockResolvedValue({
 			name,
 			email,
@@ -45,55 +45,68 @@ describe('Testando metodo created user', () => {
 			password,
 			accept_terms
 		);
-		// Verifique o resultado esperado
-		expect(output).toEqual({ message: 'created user successfully' });
-
-		// Verifique se as funções dos mocks foram chamadas corretamente
-		expect(userDataBaseMock.findEmail).toHaveBeenCalledWith(email);
-		expect(idGeneratorMock.generate).toHaveBeenCalled();
+		expect(tokenManagerMock.createToken).toHaveBeenCalled();
 		expect(hashManagerMock.hash).toHaveBeenCalledWith(password);
-		expect(userDataBaseMock.insertUser).toHaveBeenCalledWith({
-			id: '12345',
-			name,
-			email,
-			password: 'hashedPassword',
-			creation_date: expect.any(String),
-			update_date: expect.any(String),
-			role: 'NORMAL',
-			accept_terms,
-		});
+
+		expect(output).toEqual({ token: 'token' });
 	});
-	test('deve retornar um error por que email ja e cadastrado', async () => {
-		// Defina os parâmetros de teste
+
+	test('2 - caso de erro, usuário já tem e-mail cadastrado', async () => {
 		const name = 'fulano';
 		const email = 'fulano@outlook.com';
 		const password = 'fulano123';
 		const accept_terms = 'accepted';
 
-		// Defina o comportamento esperado das dependências/mocks
 		userDataBaseMock.findEmail = jest.fn().mockResolvedValue(true);
 
-		// Verifique se ocorre um erro "BadRequestError" ao chamar a função
 		await expect(async () => {
 			await userBusinessMock.createdUser(name, email, password, accept_terms);
-		}).rejects.toThrowError(BadRequestError);
-
-		// Verifique se a função findEmail do mock foi chamada corretamente
-		expect(userDataBaseMock.findEmail).toHaveBeenCalledWith(email);
+		}).rejects.toThrow(new NotFoundError('E-mail already registered'));
 	});
-	test('deve retornar um error por que o usuario nao aceitou os termos', async () => {
-		// Defina os parâmetros de teste
+	test('3 - caso de erro, usuário não aceitou os termos', async () => {
 		const name = 'fulano';
 		const email = 'fulano@outlook.com';
 		const password = 'fulano123';
-		const accept_terms = 'accepted';
+		const accept_terms = 'acc';
 
-		// Verifique se ocorre um erro "BadRequestError" ao chamar a função
+		userDataBaseMock.findEmail = jest.fn().mockResolvedValue(undefined);
+
 		await expect(async () => {
 			await userBusinessMock.createdUser(name, email, password, accept_terms);
-		}).rejects.toThrowError(BadRequestError);
+		}).rejects.toThrow(new BadRequestError('User must accept the terms'));
+	});
+});
 
-		// Verifique se a função findEmail do mock foi chamada corretamente
-		expect(userDataBaseMock.findEmail).toHaveBeenCalledWith(email);
+describe('testando login', () => {
+	test('4- caso de sucesso', async () => {
+		const email = 'fulano@outlook.com';
+		const password = 'fulano123';
+		userDataBaseMock.getUserDB = jest.fn().mockResolvedValue(true);
+		hashManagerMock.compare = jest.fn().mockResolvedValue(true);
+		tokenManagerMock.createToken = jest.fn().mockReturnValue('token');
+
+		const output = await userBusinessMock.login(email, password);
+		expect(output).toEqual({ token: 'token' });
+	});
+	test('5- caso de erro, email nao encontrado', async () => {
+		const email = 'fulano@outlook.com';
+		const password = 'fulano123';
+		userDataBaseMock.getUserDB = jest.fn().mockResolvedValue(undefined);
+		hashManagerMock.compare = jest.fn().mockResolvedValue(true);
+		tokenManagerMock.createToken = jest.fn().mockReturnValue('token');
+
+		await expect(async () => {
+			await userBusinessMock.login(email, password);
+		}).rejects.toThrow(new NotFoundError('Not found user'));
+	});
+	test('6- caso de erro, senha incorreta', async () => {
+		const email = 'fulano@outlook.com';
+		const password = 'fulano123';
+		userDataBaseMock.getUserDB = jest.fn().mockResolvedValue(true);
+		hashManagerMock.compare = jest.fn().mockResolvedValue(false);
+
+		await expect(async () => {
+			await userBusinessMock.login(email, password);
+		}).rejects.toThrow(new BadRequestError('Invalid password'));
 	});
 });

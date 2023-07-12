@@ -25,7 +25,7 @@ export class UserBusines {
 		accept_terms: string
 	): Promise<token> => {
 		const isEmail = await this.userDataBase.findEmail(email);
-		if (isEmail) throw new BadRequestError('E-mail already registred');
+		if (isEmail) throw new BadRequestError('E-mail already registered');
 		if (accept_terms !== 'accepted')
 			throw new BadRequestError('User must accept the terms');
 		const id = this.idGenerator.generate();
