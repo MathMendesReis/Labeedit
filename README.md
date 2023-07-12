@@ -25,6 +25,4 @@ O backend do Labeddit Full Stack oferece as seguintes funcionalidades:
 
 ## Documentação da API
 
-A documentação completa da API pode ser encontrada no Postman. [Clique aqui](https://documenter.getpostman.com/view/24880324/2s946chF9V) para acessar a documentação e explorar as rotas disponíveis, exemplos de requisições e respostas, e os cabeçalhos necessários para autenticação.
-
-!
+A documentação completa da API pode ser encontrada no Postman. [Clique aqui](https://documenter.getpostman.com/view/24880324/2s946chF9V) para acessar a documentação e explorar as rotas disponíveis, exemplos de requisições e respostas, e os cabeçalhos necessários para autenticação!
