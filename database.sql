@@ -10,16 +10,18 @@ CREATE TABLE users (
     accept_terms VARCHAR(50) NOT NULL
 );
 
-DROP TABLE users;
+DROP TABLE posts;
 
 CREATE TABLE posts (
     id TEXT PRIMARY KEY NOT NULL UNIQUE,
     user_id TEXT NOT NULL,
+    user_name VARCHAR(100) NOT NULL,
     contents TEXT NOT NULL,
     creation_date VARCHAR(255) NOT NULL,
     information_update VARCHAR(255) NOT NULL,
-    likes INTEGER NOT NULL,
-    dislikes INTEGER NOT NULL,
+    likes INTEGER NOT NULL DEFAULT 0,
+    dislikes INTEGER NOT NULL DEFAULT 0,
+    coments  INTEGER NOT NULL DEFAULT 0,
     FOREIGN KEY (user_id) REFERENCES users(id)
 );
 
@@ -35,24 +37,30 @@ CREATE TABLE comments (
     id TEXT PRIMARY KEY NOT NULL UNIQUE,
     user_id TEXT NOT NULL,
     post_id TEXT NOT NULL,
+    user_name TEXT NOT NULL,
     contents TEXT NOT NULL,
+    creation_date VARCHAR(255) NOT NULL,
+    information_update VARCHAR(255) NOT NULL,
     likes INTEGER NOT NULL,
     dislikes INTEGER NOT NULL,
     FOREIGN KEY (user_id) REFERENCES users(id),
     FOREIGN KEY (post_id) REFERENCES posts(id)
 );
+DROP TABLE posts;
 
-CREATE TABLE coments_like_dislike (
+CREATE TABLE coments_like (
     user_id TEXT NOT NULL,
     coments_id TEXT NOT NULL,
+    post_id TEXT NOT NULL,
     like INTEGER NOT NULL,
     FOREIGN KEY (user_id) REFERENCES users(id),
     FOREIGN KEY (coments_id) REFERENCES comments(id)
+    FOREIGN KEY (post_id) REFERENCES posts(id)
 );
 -- -- ;
 SELECT * from posts;
 
-DROP Table comments;
+DROP Table like_dislike;
 
 SELECT
  posts.id as post_id,
@@ -87,11 +95,11 @@ SELECT * from posts
 left join like_dislike on like_dislike.like ===;
 
 
-delete table ;
+DROP TABLE coments_like_dislike;
+delete from coments_like;
 
-
-INSERT INTO like_dislike(user_id, post_id, like)VALUES(
-    '2a31a8ec-74e3-4ca7-8309-74472918993a','6bd79e6a-9d40-4db6-b3ed-df76c6cecf96',1
-);
-
+delete from posts;
 SELECT * from like_dislike;
+
+SELECT * from coments_like;
+SELECT * from comments;

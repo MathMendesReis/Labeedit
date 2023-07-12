@@ -38,7 +38,7 @@ export class User {
 	) {}
 }
 
-export interface userDB {
+export interface UserDB {
 	id: string;
 	name: string;
 	email: string;

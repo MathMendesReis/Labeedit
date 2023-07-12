@@ -1,9 +1,8 @@
-import { createdUserOutput } from '../Dtos/users/createdUser.dto';
 import { token } from '../Dtos/users/login.dto';
 import { UserDataBase } from '../database/UserDataBase';
 import { BadRequestError } from '../error/BadRequestError';
 import { NotFoundError } from '../error/NotFoundError';
-import { ACCEPT_TERMS, User, userDB } from '../models/User';
+import { ACCEPT_TERMS, User, UserDB } from '../models/User';
 import { HashManager } from '../services/HashManager';
 import { IdGenerator } from '../services/IdGenerator';
 import {
@@ -24,19 +23,13 @@ export class UserBusines {
 		email: string,
 		password: string,
 		accept_terms: string
-	) => {
-		// Verificar se o email ja esta cadastrado
+	): Promise<token> => {
 		const isEmail = await this.userDataBase.findEmail(email);
 		if (isEmail) throw new BadRequestError('E-mail already registred');
-		// Verificar se o user aceitou os termos
 		if (accept_terms !== 'accepted')
 			throw new BadRequestError('User must accept the terms');
-		// Criar id
 		const id = this.idGenerator.generate();
-
-		// hash da senha
 		const hash = await this.hashManager.hash(password);
-		// Criar um novo User
 		const newUser = new User(
 			id,
 			name,
@@ -47,7 +40,7 @@ export class UserBusines {
 			USER_ROLES.NORMAL,
 			ACCEPT_TERMS.accept
 		);
-		const user: userDB = {
+		const userDB: UserDB = {
 			id: newUser.getId(),
 			name: newUser.getName(),
 			email: newUser.getEmail(),
@@ -57,13 +50,17 @@ export class UserBusines {
 			role: newUser.getRole(),
 			accept_terms: newUser.getAccept_terms(),
 		};
-		// Salvar no banco de dados
-		await this.userDataBase.insertUser(user);
-		// Retornar a resposta de sucesso
-		const output: createdUserOutput = {
-			message: 'created user successfully',
+		await this.userDataBase.insertUser(userDB);
+		const payload: TokenPayload = {
+			id: userDB.id,
+			role: userDB.role,
 		};
-		return output;
+
+		const token = this.tokenManager.createToken(payload);
+
+		return {
+			token,
+		};
 	};
 
 	public login = async (email: string, password: string): Promise<token> => {

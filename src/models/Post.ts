@@ -13,60 +13,65 @@ export class Post {
 	public removeLike(): void {
 		this.likes = this.likes - 1;
 	}
-	public get_dislikes(): number {
-		return this.dislikes;
+	public addComents(): void {
+		this.coments = this.coments + 1;
 	}
-	public get_likes(): number {
-		return this.likes;
+	public removeComents(): void {
+		this.coments = this.coments - 1;
 	}
-	public get_information_update(): string {
-		return this.information_update;
-	}
-
-	public get_creation_date(): string {
-		return this.creation_date;
-	}
-
-	public get_contents(): string {
+	public getContent(): string {
 		return this.contents;
 	}
 
-	public get_user_id(): string {
-		return this.user_id;
-	}
-	public get_id(): string {
-		return this.id;
-	}
 	public postModel(): PostDB {
 		return {
 			id: this.id,
-			user_id: this.user_id,
+			user_id: this.userId,
+			user_name: this.userName,
 			contents: this.contents,
 			creation_date: this.creation_date,
 			information_update: this.information_update,
 			likes: this.likes,
 			dislikes: this.dislikes,
+			coments: this.coments,
 		};
 	}
 
 	constructor(
 		private id: string,
-		private user_id: string,
+		private userId: string,
+		private userName: string,
 		private contents: string,
 		private creation_date: string,
 		private information_update: string,
 		private likes: number,
-		private dislikes: number
+		private dislikes: number,
+		private coments: number
 	) {}
 }
 export interface PostDB {
 	id: string;
 	user_id: string;
+	user_name: string;
 	contents: string;
 	creation_date: string;
 	information_update: string;
 	likes: number;
 	dislikes: number;
+	coments: number;
+}
+export interface PostModel {
+	id: string;
+	contents: string;
+	creation_date: string;
+	information_update: string;
+	likes: number;
+	dislikes: number;
+	coments: number;
+	creator: {
+		id: string;
+		name: string;
+	};
 }
 export interface inputPost {
 	authorization: string;

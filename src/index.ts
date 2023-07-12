@@ -2,6 +2,7 @@ import express, { Request, Response } from 'express';
 import cors from 'cors';
 import { userRouter } from './router/usersRouters';
 import { postRouter } from './router/postsRouter';
+import { comentsRouter } from './router/comentsRouter';
 
 const app = express();
 
@@ -18,3 +19,4 @@ app.get('/ping', (req: Request, res: Response) => {
 
 app.use('/users', userRouter);
 app.use('/posts', postRouter);
+app.use('/coments', comentsRouter);

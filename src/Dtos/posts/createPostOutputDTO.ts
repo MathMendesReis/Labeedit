@@ -1,3 +1,3 @@
 export interface createPostOutputDTO {
-	message: string;
+	content: string;
 }
