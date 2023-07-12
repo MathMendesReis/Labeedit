@@ -1,19 +1,32 @@
-import { Request, Response } from 'express';
 import { UserBusines } from '../business/UserBusines';
-import { inputLoginSchema } from '../DTOs/InputLogin.DTO';
 import { ZodError } from 'zod';
 import { BaseError } from '../error/BaseError';
-import { CreateAccountSchemma } from '../DTOs/InputCreateAccount.DTO';
+import { Request, Response } from 'express';
+import {
+	userControllerSchemma,
+	userControllerSchemmaLogin,
+} from '../models/User';
 
 export class UserController {
 	constructor(private userBusines: UserBusines) {}
-	public userLogin = async (req: Request, res: Response): Promise<void> => {
+	public createdUser = async (req: Request, res: Response) => {
 		try {
-			const { email, password } = inputLoginSchema.parse(req.body);
-			res.setHeader('Content-Type', 'application/json');
-			const loginResponse = await this.userBusines.login(email, password);
-			res.status(200).send(loginResponse);
+			const { name, email, password, accept_terms } =
+				userControllerSchemma.parse({
+					name: req.body.name,
+					email: req.body.email,
+					password: req.body.password,
+					accept_terms: req.body.accept_terms,
+				});
+			const response = await this.userBusines.createdUser(
+				name,
+				email,
+				password,
+				accept_terms
+			);
+			res.status(201).send(response);
 		} catch (error) {
+			console.log(error);
 			if (error instanceof ZodError) {
 				res
 					.status(400)
@@ -25,18 +38,14 @@ export class UserController {
 			}
 		}
 	};
-	public createAccount = async (req: Request, res: Response): Promise<void> => {
+	public login = async (req: Request, res: Response) => {
 		try {
-			const { name, email, password, accept_terms } =
-				CreateAccountSchemma.parse(req.body);
-			const accountCreationResponse = await this.userBusines.createAccount(
-				name,
-				email,
-				password,
-				accept_terms
-			);
-			res.setHeader('Content-Type', 'application/json');
-			res.status(201).send(accountCreationResponse);
+			const { email, password } = userControllerSchemmaLogin.parse({
+				email: req.body.email,
+				password: req.body.password,
+			});
+			const response = await this.userBusines.login(email, password);
+			res.status(200).send(response);
 		} catch (error) {
 			console.log(error);
 			if (error instanceof ZodError) {

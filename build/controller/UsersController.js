@@ -10,18 +10,22 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.UserController = void 0;
-const InputLogin_DTO_1 = require("../DTOs/InputLogin.DTO");
 const zod_1 = require("zod");
 const BaseError_1 = require("../error/BaseError");
-const InputCreateAccount_DTO_1 = require("../DTOs/InputCreateAccount.DTO");
+const User_1 = require("../models/User");
 class UserController {
-    constructor(userBusiness) {
-        this.userBusiness = userBusiness;
-        this.userLogin = (req, res) => __awaiter(this, void 0, void 0, function* () {
+    constructor(userBusines) {
+        this.userBusines = userBusines;
+        this.createdUser = (req, res) => __awaiter(this, void 0, void 0, function* () {
             try {
-                const { email, password } = InputLogin_DTO_1.inputLoginSchema.parse(req.body);
-                const response = yield this.userBusiness.userLogin(email, password);
-                res.status(200).send(response);
+                const { name, email, password, accept_terms } = User_1.userControllerSchemma.parse({
+                    name: req.body.name,
+                    email: req.body.email,
+                    password: req.body.password,
+                    accept_terms: req.body.accept_terms,
+                });
+                const response = yield this.userBusines.createdUser(name, email, password, accept_terms);
+                res.status(201).send(response);
             }
             catch (error) {
                 console.log(error);
@@ -38,10 +42,13 @@ class UserController {
                 }
             }
         });
-        this.createAccount = (req, res) => __awaiter(this, void 0, void 0, function* () {
+        this.login = (req, res) => __awaiter(this, void 0, void 0, function* () {
             try {
-                const { name, email, password, accept_terms } = InputCreateAccount_DTO_1.CreateAccountSchemma.parse(req.body);
-                const response = yield this.userBusiness.createAccount(name, email, password, accept_terms);
+                const { email, password } = User_1.userControllerSchemmaLogin.parse({
+                    email: req.body.email,
+                    password: req.body.password,
+                });
+                const response = yield this.userBusines.login(email, password);
                 res.status(200).send(response);
             }
             catch (error) {
