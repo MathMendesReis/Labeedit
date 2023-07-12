@@ -2,7 +2,6 @@ import { UserBusines } from '../../src/business/UserBusines';
 import { UserDataBase } from '../../src/database/UserDataBase';
 import { BadRequestError } from '../../src/error/BadRequestError';
 import { NotFoundError } from '../../src/error/NotFoundError';
-import { User } from '../../src/models/User';
 import { HashManager } from '../../src/services/HashManager';
 import { IdGenerator } from '../../src/services/IdGenerator';
 import { TokenManager } from '../../src/services/TokenManager';

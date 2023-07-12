@@ -14,19 +14,29 @@ const Database_1 = require("./sqlite/Database");
 class UserDataBase extends Database_1.BaseDatabase {
     constructor() {
         super(...arguments);
-        this.foundUserByEmail = (email) => __awaiter(this, void 0, void 0, function* () {
-            const result = (yield Database_1.BaseDatabase.connection(UserDataBase.TABLES_ACCOUNTS).where({
+        this.findEmail = (email) => __awaiter(this, void 0, void 0, function* () {
+            return (yield UserDataBase.connection(UserDataBase.TABLES_ACCOUNTS).where({
                 email,
             }))[0];
-            return result;
         });
-        this.addNewUserInDB = (newUser) => __awaiter(this, void 0, void 0, function* () {
-            yield Database_1.BaseDatabase.connection(UserDataBase.TABLES_ACCOUNTS).insert(newUser);
-        });
-        this.foundUserByID = (id) => __awaiter(this, void 0, void 0, function* () {
-            return (yield Database_1.BaseDatabase.connection(UserDataBase.TABLES_ACCOUNTS).where({
+        this.findUserId = (id) => __awaiter(this, void 0, void 0, function* () {
+            return (yield UserDataBase.connection(UserDataBase.TABLES_ACCOUNTS).where({
                 id,
             }))[0];
+        });
+        this.getUserDB = (email) => __awaiter(this, void 0, void 0, function* () {
+            return (yield UserDataBase.connection(UserDataBase.TABLES_ACCOUNTS).where({
+                email,
+            }))[0];
+        });
+        this.compareUser = (email, password) => __awaiter(this, void 0, void 0, function* () {
+            return (yield UserDataBase.connection(UserDataBase.TABLES_ACCOUNTS).where({
+                email,
+                password,
+            }))[0];
+        });
+        this.insertUser = (user) => __awaiter(this, void 0, void 0, function* () {
+            yield UserDataBase.connection(UserDataBase.TABLES_ACCOUNTS).insert(user);
         });
     }
 }

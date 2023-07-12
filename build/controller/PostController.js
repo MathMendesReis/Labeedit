@@ -10,20 +10,22 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.PostController = void 0;
-const inputCreatePost_DTO_1 = require("../DTOs/inputCreatePost.DTO");
+const Post_1 = require("../models/Post");
 const zod_1 = require("zod");
 const BaseError_1 = require("../error/BaseError");
 class PostController {
     constructor(postBusinnes) {
         this.postBusinnes = postBusinnes;
-        this.createPost = (req, res) => __awaiter(this, void 0, void 0, function* () {
+        this.insertPost = (req, res) => __awaiter(this, void 0, void 0, function* () {
             try {
-                const { token, contents } = inputCreatePost_DTO_1.createPostSchemma.parse(req.body);
-                yield this.postBusinnes.createNewPost(token, contents);
-                res.status(200).send({ message: 'create new post sucessulf' });
+                const { authorization, contents } = Post_1.inputPostSchemma.parse({
+                    authorization: req.headers.authorization,
+                    contents: req.body.contents,
+                });
+                const response = yield this.postBusinnes.insertPost(authorization, contents);
+                res.status(201).send(response);
             }
             catch (error) {
-                console.log(error);
                 if (error instanceof zod_1.ZodError) {
                     res
                         .status(400)
@@ -37,13 +39,15 @@ class PostController {
                 }
             }
         });
-        this.getAllPost = (req, res) => __awaiter(this, void 0, void 0, function* () {
+        this.getAllPosts = (req, res) => __awaiter(this, void 0, void 0, function* () {
             try {
-                const result = yield this.postBusinnes.getAllPosts();
-                res.status(200).send(result);
+                const { authorization } = Post_1.inputGetAllPostSchemma.parse({
+                    authorization: req.headers.authorization,
+                });
+                const response = yield this.postBusinnes.getAllPosts(authorization);
+                res.status(201).send(response);
             }
             catch (error) {
-                console.log(error);
                 if (error instanceof zod_1.ZodError) {
                     res
                         .status(400)
@@ -59,9 +63,36 @@ class PostController {
         });
         this.findPostById = (req, res) => __awaiter(this, void 0, void 0, function* () {
             try {
-                const { id } = req.params;
-                const result = yield this.postBusinnes.findPostById(id);
-                res.status(200).send(result);
+                const { authorization, id } = Post_1.inputFindPostByIdSchemma.parse({
+                    authorization: req.headers.authorization,
+                    id: req.params.id,
+                });
+                const response = yield this.postBusinnes.findPostById(authorization, id);
+                res.status(201).send(response);
+            }
+            catch (error) {
+                if (error instanceof zod_1.ZodError) {
+                    res
+                        .status(400)
+                        .json({ error: 'Erro de validação', issues: error.issues });
+                }
+                else if (error instanceof BaseError_1.BaseError) {
+                    res.status(error.statusCode).json({ error: error.message });
+                }
+                else {
+                    res.status(500).json({ error: 'Erro inesperado', message: error });
+                }
+            }
+        });
+        this.addLikeDislike = (req, res) => __awaiter(this, void 0, void 0, function* () {
+            try {
+                const { authorization, id, like } = Post_1.inputLikeSchemma.parse({
+                    authorization: req.headers.authorization,
+                    id: req.params.id,
+                    like: req.body.like,
+                });
+                const response = yield this.postBusinnes.addLikeDislike(authorization, id, like);
+                res.status(200).send(response);
             }
             catch (error) {
                 console.log(error);
@@ -77,9 +108,6 @@ class PostController {
                     res.status(500).json({ error: 'Erro inesperado', message: error });
                 }
             }
-        });
-        this.updatePost = (req, res) => __awaiter(this, void 0, void 0, function* () {
-            return 'ola mundo';
         });
     }
 }
