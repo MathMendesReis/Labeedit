@@ -1,5 +1,5 @@
 import { ComentsDB, likesDislikesComents } from '../models/Coments';
-import { Post, likesDislikes, PostDB } from '../models/Post';
+import { likesDislikes, PostDB } from '../models/Post';
 import { UserDB } from '../models/User';
 import { BaseDatabase } from './sqlite/Database';
 

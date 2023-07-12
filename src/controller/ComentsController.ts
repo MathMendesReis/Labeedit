@@ -1,11 +1,4 @@
 import { Request, Response } from 'express';
-import { PostBusinnes } from '../business/PostBusines';
-import {
-	inputFindPostByIdSchemma,
-	inputGetAllPostSchemma,
-	inputLikeSchemma,
-	inputPostSchemma,
-} from '../models/Post';
 import { ZodError } from 'zod';
 import { BaseError } from '../error/BaseError';
 import {

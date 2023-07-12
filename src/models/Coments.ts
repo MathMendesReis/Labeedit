@@ -1,5 +1,4 @@
 import { z } from 'zod';
-import { Post } from './Post';
 
 export class Comment {
 	constructor(

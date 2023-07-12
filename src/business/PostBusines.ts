@@ -3,7 +3,7 @@ import { UserDataBase } from '../database/UserDataBase';
 import { IdGenerator } from '../services/IdGenerator';
 import { TokenManager } from '../services/TokenManager';
 import { NotFoundError } from '../error/NotFoundError';
-import { Post, likesDislikes, PostDB, PostModel } from '../models/Post';
+import { Post, likesDislikes, PostModel } from '../models/Post';
 import { BadRequestError } from '../error/BadRequestError';
 import { createPostOutputDTO } from '../Dtos/posts/createPostOutputDTO';
 

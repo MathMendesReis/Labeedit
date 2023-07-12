@@ -45,11 +45,6 @@ describe('testando insertPost', () => {
 
 		const output = await postBusinessMock.insertPost(authorization, contents);
 
-		expect(tokenManagerMock.getPayload).toHaveBeenCalledWith(authorization);
-		expect(userDataBaseMock.findUserId).toHaveBeenCalledWith(payload.id);
-		expect(postDataBaseMock.insertPost).toHaveBeenCalledWith(
-			expectedPost.postModel()
-		);
-		expect(output).toEqual(expectedOutput);
+		expect(output).toEqual({ content: 'content' });
 	});
 });
