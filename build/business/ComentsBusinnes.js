@@ -49,7 +49,30 @@ class ComentsBusiness {
             if (payload === null) {
                 throw new BadRequestError_1.BadRequestError('invalid token');
             }
-            return yield this.comentDataBase.getComentsByPostId(id);
+            const userDB = yield this.userDataBase.findUserId(payload.id);
+            if (!userDB) {
+                throw new NotFoundError_1.NotFoundError('Not Found User');
+            }
+            const comentsData = yield this.comentDataBase.getComentsByPostId(id);
+            const coments = comentsData === null || comentsData === void 0 ? void 0 : comentsData.map((comentData) => {
+                return {
+                    id: comentData.id,
+                    contents: comentData.contents,
+                    creation_date: comentData.creation_date,
+                    information_update: comentData.creation_date,
+                    likes: comentData.likes,
+                    dislikes: comentData.dislikes,
+                    coments: comentData.contents,
+                    post: {
+                        id: comentData.post_Id,
+                    },
+                    creator: {
+                        id: comentData.user_id,
+                        name: userDB.name,
+                    },
+                };
+            });
+            return coments;
         });
         this.addLikeDislike = (authorization, coments_id, post_id, like) => __awaiter(this, void 0, void 0, function* () {
             const payload = this.tokenManager.getPayload(authorization);

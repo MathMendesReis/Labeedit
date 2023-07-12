@@ -74,7 +74,7 @@ class ComentsController {
                     id: req.params.id,
                 });
                 const response = yield this.comentsBusiness.getComentsByPostId(authorization, id);
-                res.status(201).send(response);
+                res.status(200).send(response);
             }
             catch (error) {
                 console.log(error);

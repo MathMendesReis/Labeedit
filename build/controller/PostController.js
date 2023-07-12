@@ -45,7 +45,7 @@ class PostController {
                     authorization: req.headers.authorization,
                 });
                 const response = yield this.postBusinnes.getAllPosts(authorization);
-                res.status(201).send(response);
+                res.status(200).send(response);
             }
             catch (error) {
                 if (error instanceof zod_1.ZodError) {
@@ -68,7 +68,7 @@ class PostController {
                     id: req.params.id,
                 });
                 const response = yield this.postBusinnes.findPostById(authorization, id);
-                res.status(201).send(response);
+                res.status(200).send(response);
             }
             catch (error) {
                 if (error instanceof zod_1.ZodError) {
@@ -92,7 +92,7 @@ class PostController {
                     like: req.body.like,
                 });
                 const response = yield this.postBusinnes.addLikeDislike(authorization, id, like);
-                res.status(200).send(response);
+                res.status(201).send(response);
             }
             catch (error) {
                 console.log(error);
