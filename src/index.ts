@@ -13,8 +13,8 @@ app.listen(Number(process.env.PORT), () => {
 	console.log(`Servidor rodando na porta ${Number(process.env.PORT)}`);
 });
 
-app.get('/ping', (req: Request, res: Response) => {
-	res.send('Pong!');
+app.get('/', (req: Request, res: Response) => {
+	res.send('Hello world!');
 });
 
 app.use('/users', userRouter);

@@ -4,10 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "tsc && node build/index.js",
+    "start": "tsc && node --max-old-space-size=4096 build/index.js",
     "build": "tsc",
     "dev": "ts-node-dev ./src/index.ts",
-    "prepare": "husky install",
     "format": "npx prettier --write",
     "eslint": "npx eslint",
     "test": "jest"
