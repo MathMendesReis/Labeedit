@@ -5,7 +5,12 @@ import { NotFoundError } from '../error/NotFoundError';
 import { BadRequestError } from '../error/BadRequestError';
 import { createPostOutputDTO } from '../Dtos/posts/createPostOutputDTO';
 import { ComentDataBase } from '../database/ComentsDataBase';
-import { ComentsDB, Comment, likesDislikesComents } from '../models/Coments';
+import {
+	ComentsDB,
+	ComentsModel,
+	Comment,
+	likesDislikesComents,
+} from '../models/Coments';
 import { Post } from '../models/Post';
 
 export class ComentsBusiness {
@@ -72,12 +77,38 @@ export class ComentsBusiness {
 	public getComentsByPostId = async (
 		authorization: string,
 		id: string
-	): Promise<ComentsDB[]> => {
+	): Promise<ComentsModel[]> => {
 		const payload = this.tokenManager.getPayload(authorization);
 		if (payload === null) {
 			throw new BadRequestError('invalid token');
 		}
-		return await this.comentDataBase.getComentsByPostId(id);
+		const userDB = await this.userDataBase.findUserId(payload.id);
+		if (!userDB) {
+			throw new NotFoundError('Not Found User');
+		}
+
+		const comentsData = await this.comentDataBase.getComentsByPostId(id);
+
+		const coments: ComentsModel[] = comentsData?.map((comentData) => {
+			return {
+				id: comentData.id,
+				contents: comentData.contents,
+				creation_date: comentData.creation_date,
+				information_update: comentData.creation_date,
+				likes: comentData.likes,
+				dislikes: comentData.dislikes,
+				coments: comentData.contents,
+				post: {
+					id: comentData.post_Id,
+				},
+				creator: {
+					id: comentData.user_id,
+					name: userDB.name,
+				},
+			};
+		});
+
+		return coments;
 	};
 	public addLikeDislike = async (
 		authorization: string,

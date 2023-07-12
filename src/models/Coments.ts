@@ -50,6 +50,22 @@ export interface ComentsDB {
 	likes: number;
 	dislikes: number;
 }
+export interface ComentsModel {
+	id: string;
+	contents: string;
+	creation_date: string;
+	information_update: string;
+	likes: number;
+	dislikes: number;
+	coments: string;
+	post: {
+		id: string;
+	};
+	creator: {
+		id: string;
+		name: string;
+	};
+}
 export interface inputFindComentsById {
 	authorization: string;
 	contents: string;

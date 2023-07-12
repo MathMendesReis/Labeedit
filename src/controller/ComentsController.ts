@@ -75,7 +75,7 @@ export class ComentsController {
 				authorization,
 				id
 			);
-			res.status(201).send(response);
+			res.status(200).send(response);
 		} catch (error) {
 			console.log(error);
 			if (error instanceof ZodError) {

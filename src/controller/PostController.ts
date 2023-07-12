@@ -42,7 +42,7 @@ export class PostController {
 			});
 
 			const response = await this.postBusinnes.getAllPosts(authorization);
-			res.status(201).send(response);
+			res.status(200).send(response);
 		} catch (error) {
 			if (error instanceof ZodError) {
 				res
@@ -63,7 +63,7 @@ export class PostController {
 			});
 
 			const response = await this.postBusinnes.findPostById(authorization, id);
-			res.status(201).send(response);
+			res.status(200).send(response);
 		} catch (error) {
 			if (error instanceof ZodError) {
 				res
@@ -89,7 +89,7 @@ export class PostController {
 				id,
 				like
 			);
-			res.status(200).send(response);
+			res.status(201).send(response);
 		} catch (error) {
 			console.log(error);
 			if (error instanceof ZodError) {
