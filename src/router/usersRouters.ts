@@ -17,5 +17,5 @@ const userController = new UserController(
 	)
 );
 
-userRouter.post('/', userController.createdUser);
-userRouter.get('/', userController.login);
+userRouter.post('/singup', userController.createdUser);
+userRouter.post('/login', userController.login);
