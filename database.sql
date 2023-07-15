@@ -10,7 +10,6 @@ CREATE TABLE users (
     accept_terms VARCHAR(50) NOT NULL
 );
 
-DROP TABLE posts;
 
 CREATE TABLE posts (
     id TEXT PRIMARY KEY NOT NULL UNIQUE,
@@ -46,7 +45,6 @@ CREATE TABLE comments (
     FOREIGN KEY (user_id) REFERENCES users(id),
     FOREIGN KEY (post_id) REFERENCES posts(id)
 );
-DROP TABLE posts;
 
 CREATE TABLE coments_like (
     user_id TEXT NOT NULL,
