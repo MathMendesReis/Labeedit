@@ -101,3 +101,5 @@ SELECT * from like_dislike;
 
 SELECT * from coments_like;
 SELECT * from comments;
+
+select * from posts;
